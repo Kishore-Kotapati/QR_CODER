@@ -1,0 +1,13 @@
+Check of Person A RTL 'A_2026-10-25' on varaha-eda.cs.iitm.ac.in at Sun Oct 25 19:38:25 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+files: QRDecoder.bsv QRFrontEnd.bsv QRPayload.bsv 
+md5:
+9e2f52391c6916890ced3d0b39a44b3e  QRDecoder.bsv
+80db08a96bdf18bc62331d48a868dd32  QRFrontEnd.bsv
+bedcdcf508c8f81542bf1bacd88b4b54  QRPayload.bsv
+--------------------------------------------------------------
+1. COMPILE: FAILED -- first errors:
+Error: "./QRFrontEnd.bsv", line 108, column 16: (P0005)
+  Unexpected SV 3.1 keyword `dist'; expected `{' or identifier starting with
+  lowercase
+--------------------------------------------------------------
+Logs in /scratch/CS6230_EE26E016/qr/work/verification/results/checkA_A_2026-10-25

@@ -1,0 +1,2347 @@
+Using the license keys ICCompilerIIs-Shell and ICCompilerII-NX in this mode.
+
+                                IC Compiler (TM)
+                              IC Compiler-PC (TM)
+                              IC Compiler-XP (TM)
+                              IC Compiler-DP (TM)
+                              IC Compiler-AG (TM)
+
+                 Version V-2023.12 for linux64 - Nov 27, 2023 
+
+                    Copyright (c) 1988 - 2023 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+Initializing...
+Starting shell in Shared License mode...
+Warning: bus naming style '' is not valid. (UCN-32)
+Current time:       Wed Nov  4 19:56:31 2026
+Hostname:           varaha-eda.cs.iitm.ac.in
+CPU Model:          Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+CPU Details:        Cores = 48 : Sockets = 2 : Cache Size = 16896 KB : Freq = 2.30 GHz
+OS:                 Linux 4.18.0-553.el8_10.x86_64
+RAM:                251 GB (Free 120 GB)
+Swap:                 3 GB (Free   0 GB)
+Work Filesystem:    /scratch mounted to /dev/sda4
+Tmp Filesystem:     / mounted to /dev/mapper/rl-root
+Work Disk:          8895 GB (Free 1185 GB)
+Tmp Disk:            69 GB (Free  55 GB)
+
+CPU Load: 25%, Ram Free: 120 GB, Swap Free: 0 GB, Work Disk Free: 1185 GB, Tmp Disk Free: 55 GB
+Current time:       Wed Nov  4 19:56:31 2026
+Hostname:           varaha-eda.cs.iitm.ac.in
+CPU Model:          Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz
+CPU Details:        Cores = 48 : Sockets = 2 : Cache Size = 16896 KB : Freq = 2.30 GHz
+OS:                 Linux 4.18.0-553.el8_10.x86_64
+RAM:                251 GB (Free 120 GB)
+Swap:                 3 GB (Free   0 GB)
+Work Filesystem:    /scratch mounted to /dev/sda4
+Tmp Filesystem:     / mounted to /dev/mapper/rl-root
+Work Disk:          8895 GB (Free 1185 GB)
+Tmp Disk:            69 GB (Free  55 GB)
+
+CPU Load: 25%, Ram Free: 120 GB, Swap Free: 0 GB, Work Disk Free: 1185 GB, Tmp Disk Free: 55 GB
+# icc_qr.tcl -- place and route of the whole QR decoder (mkQRDecoder) in ICC.
+# Person B.  This is the course udcounter/icc1/scripts/icc.tcl step by step.
+# Changes, all marked "B:":
+#   B: design, netlist, period and core size come from run_icc.sh (environment)
+#   B: clock port is CLK (bsc name), not Clk
+#   B: no PlacePins.tcl (the decoder has ~100 pins; ICC spreads them evenly)
+#   B: power straps spaced for a ~300 um core instead of a 10 um core
+#   B: one extra detail-route pass only if DRCs are left
+#   B: v2 (2 Nov): clock tree built first, clock wires routed as a separate,
+#      limited step; no crosstalk-driven routing; PGRT-030 messages hidden
+#   B: v3 (2 Nov): routing only on M2..M7 (M3..M7 are strict one-way layers in
+#      this 14 nm tech file), clock wires on M3..M6, clock wires routed fresh
+#      (not from the CTS rough routes).  Test on run 2's placement: clock
+#      DRCs 36,354 (stuck 13 h) -> 41 in 9 minutes.  Router output now in icc.log.
+#   B: v4 (3 Nov): first full run (v3b) finished: setup met, 54,599 um2, 2.26 mW,
+#      but 1,390 DRCs, 20 LVS shorts (M1/M2), 119 hold paths at -0.01 ns.
+#      v4: removed the clock_opt -only_psyn line that failed (COPT-001);
+#      post-route hold fix; DRC repair loop (up to 3 passes, 40 rounds each);
+#      fillers placed with metal checking (-cell_with_metal); DRC repair after fillers.
+#   B: v5 (3 Nov): v4 runs (UTIL 0.6 and 0.5) both ended with ~1,180 DRCs and
+#      20 LVS shorts: every short is signal-signal on M1 at a cell pin (0.034 um
+#      squares, mostly in the Chien/Forney logic).  v5: router must land vias
+#      INSIDE the M1 cell pins (no M1 patches next to pins); optional limit on
+#      local cell density (DENSITY=...) so dense logic is spread out.
+#   B: v6 (3 Nov): v5 pin rule made it far worse (146,000+ DRCs): removed.
+#      Diagnosis of v4's 20 LVS shorts: 18 are between two INPUT pins of the same
+#      cell (OAI22 B1/B2, OAI21 A1/A2, ND2_CDC A1/A2): the via on one pin touches
+#      the next pin.  Fix at the source: DC and ICC must not use those cells
+#      (DONT_USE).  Also a 0.02 ns hold margin while fixing hold.
+#   B: extra reports for Table 6: hold timing, area, power, utilization,
+#      clock tree, LVS (verify_lvs); a "B: STAGE" time stamp per step; exit at the end
+set sh_continue_on_error true
+true
+set DESIGN mkQRDecoder
+mkQRDecoder
+set NET $env(QR_NET)
+/scratch/CS6230_EE26E016/qr/work/pd/experiments/B2_full/outputs_r4h12/mkQRDecoder.verilog_noassign.v
+set T   $env(QR_PERIOD)
+1.2
+set L   $env(QR_L)
+244
+proc stage {s} { puts "B: STAGE $s [clock format [clock seconds] -format {%d %b %H:%M}]" }
+stage "start: $DESIGN, netlist $NET, period $T ns, core ${L} x ${L} um"
+B: STAGE start: mkQRDecoder, netlist /scratch/CS6230_EE26E016/qr/work/pd/experiments/B2_full/outputs_r4h12/mkQRDecoder.verilog_noassign.v, period 1.2 ns, core 244 x 244 um 04 Nov 19:56
+catch { set_host_options -max_cores $env(QR_CORES) }
+0
+# B: v2: 595,875 "via dropped" power warnings filled a 117 MB log in run 1
+suppress_message PGRT-030
+source ../scripts/icc_lib_setup.tcl
+Loading db file '/home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db'
+Loading db file '/home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ff0p88v125c.db'
+1
+source ../scripts/icc_initial_setup.tcl
+Start to load technology file /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_TECH_DATA/tf/saed14nm_1p9m_icc.tf.
+Warning: Layer 'M1' attribute 'numMasks' has a value of 1. (TFCHK-064)
+Information: Non-metal layer 'VIA1' has the metal layer attribute 'minEnclosedWidth'. (line 597) (TFCHK-046)
+Warning: Layer 'M2' attribute 'numMasks' has a value of 1. (TFCHK-064)
+Warning: Layer 'M3' attribute 'numMasks' has a value of 1. (TFCHK-064)
+Information: Non-metal layer 'HVTIMP' has the metal layer attribute 'minArea'. (line 1242) (TFCHK-046)
+Information: Non-metal layer 'LVTIMP' has the metal layer attribute 'minArea'. (line 1276) (TFCHK-046)
+Information: Non-metal layer 'SLVTIMP' has the metal layer attribute 'minArea'. (line 1293) (TFCHK-046)
+Information: Non-metal layer 'RVTIMP' has the metal layer attribute 'minArea'. (line 1310) (TFCHK-046)
+Warning: Layer 'M1' has a pitch 0.074 that does not match the recommended wire-to-via pitch 0.118 or 0.075. (TFCHK-049)
+Warning: Layer 'M2' has a pitch 0.06 that does not match the recommended wire-to-via pitch 0.118. (TFCHK-049)
+Warning: Layer 'M3' has a pitch 0.074 that does not match the recommended wire-to-via pitch 0.118. (TFCHK-049)
+Warning: Layer 'M4' has a pitch 0.1 that does not match the recommended wire-to-via pitch 0.135 or 0.145. (TFCHK-049)
+Warning: Layer 'M5' has a pitch 0.1 that does not match the recommended wire-to-via pitch 0.125. (TFCHK-049)
+Warning: Layer 'M6' has a pitch 0.1 that does not match the recommended wire-to-via pitch 0.137 or 0.135. (TFCHK-049)
+Warning: Layer 'M7' has a pitch 0.1 that does not match the recommended wire-to-via pitch 0.137. (TFCHK-049)
+Warning: Layer 'M8' has a pitch 0.1 that does not match the recommended wire-to-via pitch 0.135. (TFCHK-049)
+Warning: Layer 'M9' has a pitch 0.1 that does not match the recommended wire-to-via pitch 1.57. (TFCHK-049)
+Warning: Layer 'MRDL' has a pitch 4 that does not match the recommended wire-to-via pitch 4.5. (TFCHK-049)
+Warning: Layer 'M3' has a pitch 0.074 that does not match the doubled pitch 0.148 or tripled pitch 0.222. (TFCHK-050)
+Warning: Layer 'M4' has a pitch 0.1 that does not match the doubled pitch 0.12 or tripled pitch 0.18. (TFCHK-050)
+Warning: Layer 'M5' has a pitch 0.1 that does not match the doubled pitch 0.148 or tripled pitch 0.222. (TFCHK-050)
+Warning: Layer 'M6' has a pitch 0.1 that does not match the doubled pitch 0.2 or tripled pitch 0.3. (TFCHK-050)
+Warning: Layer 'M7' has a pitch 0.1 that does not match the doubled pitch 0.2 or tripled pitch 0.3. (TFCHK-050)
+Warning: Layer 'M8' has a pitch 0.1 that does not match the doubled pitch 0.2 or tripled pitch 0.3. (TFCHK-050)
+Warning: Layer 'M9' has a pitch 0.1 that does not match the doubled pitch 0.2 or tripled pitch 0.3. (TFCHK-050)
+Warning: Layer 'MRDL' has a pitch 4 that does not match the doubled pitch 0.2 or tripled pitch 0.3. (TFCHK-050)
+Warning: ContactCode 'VIA67LG' attribute 'minCutSpacing' has an invalid value of 0.05. (TFCHK-093)
+Warning: ContactCode 'VIA78LG_C' attribute 'minCutSpacing' has an invalid value of 0.05. (TFCHK-093)
+Warning: ContactCode 'VIA78LG' attribute 'minCutSpacing' has an invalid value of 0.05. (TFCHK-093)
+Warning: CapModel sections are missing. Capacitance models should be loaded with a TLU+ file later. (TFCHK-084)
+Technology file /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_TECH_DATA/tf/saed14nm_1p9m_icc.tf has been loaded successfully.
+false
+read_verilog -top $DESIGN -cell $DESIGN [list $NET]
+Warning: Unit conflict found: Milkyway technology file resistance unit is MOhm; main library resistance unit is kOhm. (IFS-007)
+Loading db file '/home/tools/pd_tools/icc/V-2023.12/libraries/syn/gtech.db'
+Loading db file '/home/tools/pd_tools/icc/V-2023.12/libraries/syn/standard.sldb'
+
+*****  Verilog HDL translation! *****
+
+*****    Start Pass 1 *****
+Compiling source file /scratch/CS6230_EE26E016/qr/work/pd/experiments/B2_full/outputs_r4h12/mkQRDecoder.verilog_noassign.v
+
+*****  Pass 1 Complete *****
+Elapsed =    0:00:08, CPU =    0:00:06
+
+*****  Verilog HDL translation! *****
+
+*****    Start Pass 2 *****
+Compiling source file /scratch/CS6230_EE26E016/qr/work/pd/experiments/B2_full/outputs_r4h12/mkQRDecoder.verilog_noassign.v
+
+*****  Pass 2 Complete *****
+
+*****   Verilog HDL translation completed! *****
+Elapsed =    0:00:05, CPU =    0:00:03
+Hierarchy Preservation is turned ON
+The quick-attach skip-search mode has been turned on.
+  Start axu naming escaping style change ...
+  End axu naming escaping style change, status is 1
+Checking single pin net for cell 'mkQRDecoder.CEL' now...
+Total number of cell instances: 92233
+Total number of nets: 94055
+Total number of ports: 46 (include 0 PG ports)
+Total number of hierarchical cell instances: 3863
+
+The quick-attach skip-search mode has been turned off.
+INFO:  total find 0 pg nets connected with tie net.
+Elapsed =    0:00:01, CPU =    0:00:01
+Information: Read verilog completed successfully.
+1
+read_sdc ../scripts/qr_icc.sdc
+Information: linking reference library : /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/milkyway/saed14rvt.mw. (PSYN-878)
+
+  Linking design 'mkQRDecoder'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (3863 designs)            mkQRDecoder.CEL, etc
+  saed14rvt_base_ss0p72v125c (library) /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db
+
+ Info: hierarchy_separator was changed to /
+
+Reading SDC version 2.1...
+ Info: hierarchy_separator was changed to /
+1
+link -force
+
+  Linking design 'mkQRDecoder'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (3863 designs)            mkQRDecoder.CEL, etc
+  saed14rvt_base_ss0p72v125c (library) /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db
+
+1
+current_design
+Current design is 'mkQRDecoder'.
+{mkQRDecoder}
+# B: v6: same dont_use cells as DC, so ICC does not size cells into them
+if {[info exists env(QR_DONT_USE)] && $env(QR_DONT_USE) ne ""} {
+  foreach pat $env(QR_DONT_USE) {
+    set lc [get_lib_cells -quiet */$pat]
+    if {[sizeof_collection $lc] > 0} { set_dont_use $lc }
+    stage "dont_use $pat: [sizeof_collection $lc] lib cells, [sizeof_collection [get_cells -quiet -hier -filter "ref_name=~$pat"]] used in netlist"
+  }
+}
+B: STAGE dont_use SAEDRVT14_OAI22_*: 14 lib cells, 0 used in netlist 04 Nov 19:56
+B: STAGE dont_use SAEDRVT14_OAI21_*: 18 lib cells, 0 used in netlist 04 Nov 19:56
+B: STAGE dont_use SAEDRVT14_ND2_CDC_*: 8 lib cells, 0 used in netlist 04 Nov 19:56
+B: STAGE dont_use SAEDRVT14_MUX2_MM_4: 2 lib cells, 0 used in netlist 04 Nov 19:56
+#
+create_port {VDD VSS} -direction inout
+Creating port 'VDD' in design 'mkQRDecoder'.
+Creating port 'VSS' in design 'mkQRDecoder'.
+1
+set_user_grid -user_grid {{0 0} {0.0005 0.0005}}
+Set user grid to {{0 0} {0.001 0.001}} successfully.
+1
+set_fp_pin_constraints -allowed_layers {M2 M3} -pin_spacing 4
+Warning: There are no soft macros or plan groups in the current cell (FPHSM-1606)
+1
+create_floorplan -control_type width_and_height -core_width $L -core_height $L
+0 pads are constrained in TDF table
+There are 0 IO pads 0 corner pads in total
+Core aspect ratio adjusted to 0.998
+Core Utilization adjusted to 0.938
+Decrease number of rows to 387
+Start to create wire tracks ...
+WARNING : No routing direction for layer M3, set to H
+WARNING : No routing direction for layer M4, set to V
+WARNING : No routing direction for layer M5, set to H
+WARNING : No routing direction for layer M6, set to V
+WARNING : No routing direction for layer M7, set to H
+WARNING : No routing direction for layer M8, set to V
+WARNING : No routing direction for layer M9, set to H
+WARNING : No routing direction for layer MRDL, set to V
+Number of terminals created: 46.
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Name          Original Ports
+mkQRDecoder               46
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Completed pin assignment.
+Elapsed =    0:00:00, CPU =    0:00:00
+Planner Summary:
+This floorplan is created by using tile name (unit).
+	Row Direction = HORIZONTAL
+	Control Parameter =  Width & Height
+	Core Utilization = 0.938
+	Number Of Rows = 387
+	Core Width = 243.978
+	Core Height = 243.6
+	Aspect Ratio = 0.998
+	Double Back ON
+	Flip First Row = NO
+	Start From First Row = NO
+Planner run through successfully.
+1
+derive_pg_connection -power_net {VDD} -ground_net {VSS} -power_pin {VDD} -ground_pin {VSS}
+Information: connected 92233 power ports and 92233 ground ports
+1
+derive_pg_connection -power_net {VDD} -ground_net {VSS} -tie
+reconnected total 0 tie highs and 0 tie lows
+1
+connect_net {VDD} {VDD}
+Connecting net 'VDD' to port 'VDD'.
+1
+connect_net {VSS} {VSS}
+Connecting net 'VSS' to port 'VSS'.
+1
+stage "floorplan done"
+B: STAGE floorplan done 04 Nov 19:57
+# B: same layers / widths as the course, wider steps (course: 10 um core)
+create_power_straps -direction vertical -start_at 3.000 -nets {VDD VSS} -layer M6 \
+  -width 0.5 -configure step_and_stop -step 20 -stop $L -pitch_within_group 1.0
+Using [2 x 2] Fat Wire Table for VIA1
+Using [5 x 5] Fat Wire Table for M2
+Using [2 x 2] Fat Wire Table for VIA2
+Using [5 x 5] Fat Wire Table for M3
+Using [2 x 2] Fat Wire Table for VIA3
+Using [4 x 4] Fat Wire Table for M4
+Using [2 x 2] Fat Wire Table for VIA4
+Using [4 x 4] Fat Wire Table for M5
+Using [2 x 2] Fat Wire Table for VIA5
+Using [4 x 4] Fat Wire Table for M6
+Using [2 x 2] Fat Wire Table for VIA6
+Using [5 x 5] Fat Wire Table for M7
+Using [2 x 2] Fat Wire Table for VIA7
+Using [5 x 5] Fat Wire Table for M8
+Using [5 x 5] Fat Wire Table for M9
+**** WARNING:no default via for layer (VIA0)
+
+**** WARNING:no default via for layer (VIA0)
+
+
+[Prerouter] CPU = 00:00:00, Elapsed = 00:00:01
+	Peak Memory =      998M Data =        1M
+1
+create_power_straps -direction horizontal -start_at 2.500 -nets {VDD VSS} -layer M5 \
+  -width 0.5 -configure step_and_stop -step 20 -stop $L -pitch_within_group 1.0
+
+[Prerouter] CPU = 00:00:00, Elapsed = 00:00:00
+	Peak Memory =      998M Data =        1M
+1
+create_power_straps -direction vertical -start_at 2.000 -nets {VDD VSS} -layer M4 \
+  -width 0.2 -configure step_and_stop -step 10 -stop $L -pitch_within_group 0.3
+WARNING:  The specified pitch 0.300000 will cause a design-rule error with more than one wire. The minimum pitch 0.340000 is used instead.
+
+[Prerouter] CPU = 00:00:00, Elapsed = 00:00:00
+	Peak Memory =      998M Data =        1M
+1
+preroute_standard_cells -extend_for_multiple_connections  -extension_gap 50 -connect horizontal \
+  -fill_empty_rows  -port_filter_mode off -cell_master_filter_mode off -cell_instance_filter_mode \
+  off -voltage_area_filter_mode off -route_type {P/G Std. Cell Pin Conn}
+Using [2 x 2] Fat Wire Table for VIA1
+Using [5 x 5] Fat Wire Table for M2
+Using [2 x 2] Fat Wire Table for VIA2
+Using [5 x 5] Fat Wire Table for M3
+Using [2 x 2] Fat Wire Table for VIA3
+Using [4 x 4] Fat Wire Table for M4
+Using [2 x 2] Fat Wire Table for VIA4
+Using [4 x 4] Fat Wire Table for M5
+Using [2 x 2] Fat Wire Table for VIA5
+Using [4 x 4] Fat Wire Table for M6
+Using [2 x 2] Fat Wire Table for VIA6
+Using [5 x 5] Fat Wire Table for M7
+Using [2 x 2] Fat Wire Table for VIA7
+Using [5 x 5] Fat Wire Table for M8
+Using [5 x 5] Fat Wire Table for M9
+**** WARNING:no default via for layer (VIA0)
+
+**** WARNING:no default via for layer (VIA0)
+
+
+Info: using template cell SAEDRVT14_OA211_4 for empty rows
+Prerouting standard cells horizontally: 
+ [10.08%]  
+ [20.16%]  
+ [30.23%]  
+ [40.31%]  
+ [50.39%]  
+ [60.47%]  
+ [70.54%]  
+ [80.62%]  
+ [90.70%]  
+ [100.00%] [done] 
+WARNING: 193 floating rail segments 
+
+[Prerouter] CPU = 00:00:34, Elapsed = 00:00:41
+	Peak Memory =     1057M Data =       90M
+1
+derive_pg_connection -power_net {VDD} -ground_net {VSS} -power_pin {VDD} -ground_pin {VSS}
+Information: connected 0 power ports and 0 ground ports
+1
+derive_pg_connection -power_net {VDD} -ground_net {VSS} -power_pin {VDD} -ground_pin {VSS} -tie
+reconnected total 0 tie highs and 0 tie lows
+1
+set_operating_conditions -analysis_type on_chip_variation -max ss0p72v125c -min ff0p88v125c \
+  -min_library {saed14rvt_base_ff0p88v125c} -max_library {saed14rvt_base_ss0p72v125c}
+Information: linking reference library : /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/milkyway/saed14rvt.mw. (PSYN-878)
+
+  Linking design 'mkQRDecoder'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (3863 designs)            mkQRDecoder.CEL, etc
+  saed14rvt_base_ss0p72v125c (library) /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db
+
+Using operating conditions 'ss0p72v125c' found in library 'saed14rvt_base_ss0p72v125c'.
+Using operating conditions 'ff0p88v125c' found in library 'saed14rvt_base_ff0p88v125c'.
+1
+stage "power grid done"
+B: STAGE power grid done 04 Nov 19:57
+#
+set_auto_disable_drc_nets -constant false
+1
+set_fix_hold CLK
+1
+set_app_var enable_recovery_removal_arcs true
+true
+set_place_opt_strategy -layer_optimization_effort high
+1
+set_place_opt_strategy -consider_routing  true
+1
+# B: v5: optional local density limit (env QR_DENSITY, e.g. 0.65)
+if {[info exists env(QR_DENSITY)] && $env(QR_DENSITY) ne ""} {
+  set_app_var placer_max_cell_density_threshold $env(QR_DENSITY)
+  stage "local cell density limit $env(QR_DENSITY)"
+}
+create_fp_placement -effort high
+Warning: No scan chain found. (VFP-425)
+CPU time for freeing timing design =    0:00:03
+Elapsed time for freeing timing design =    0:00:05
+num_cpus = 4
+Reference Point: Lower Left-hand corner of Core Base Array
+Reference Point: Lower Left-hand corner of Core Base Array
+Reference Point: Lower Left-hand corner of Core Base Array
+Reference Point: Lower Left-hand corner of Core Base Array
+Reference Point: Lower Left-hand corner of Core Base Array
+flip_chip = 0
+*** Performing global placement...
+Transferring Data From Milkyway...
+Number of plan group pins = 0
+Auto detecting hierarchy nodes for grouping ...
+Warning: No hierarchy information in design. Hierarchy gravity turned off. (VFP-415)
+  196 blocks freed
+  0 bytes freed
+Placement Effort Level: High
+Placement Design Stats
+Num std     cells  = 92233 (fixed = 0)
+Num macros  cells  = 0 (fixed = 0)
+Num IOs     cells  = 0
+Num bump    cells  = 0
+Num LS/ISO  cells  = 0
+Num no type cells  = 0
+Num other   cells  = 0
+Num cells with no net connections = 2
+Num non-zero wt nets = 94052
+Num     zero wt nets = 0
+A net with highest fanout (275) is backend/cf/net42614
+grouping macros ...
+0 macro arrays generated automatically.
+0 array cells created
+No large HMs were processed
+start placement with 4 threads
+coarse place 0% done.
+coarse place 14% done.
+coarse place 29% done.
+coarse place 43% done.
+coarse place 57% done.
+coarse place 71% done.
+coarse place 86% done.
+coarse place 100% done.
+*********************************************
+Report     : Virtual Flat Placement
+Design     : mkQRDecoder
+Version    : V-2023.12
+Date       : Wed Nov  4 19:58:32 2026
+*********************************************
+
+Total wirelength: 1659416.47
+Number of 100x100 tracks cell density regions: 1024
+Number of low (< 10%) cell density regions: 0 (0.000%)
+Number of high (> 200%) cell density regions: 0 (0.000%)
+Maximum cell density: 102.28% (at 110 81 118 88)
+Checking hard macro to hard macro overlaps...
+Number of hard macro to hard macro overlaps: 0
+Checking hard macro to std cell overlaps...
+Number of hard macro to std cell overlaps: 0
+Checking plan group to plan group overlaps...
+Number of plan group to plan group overlaps: 0
+Number of TL cells overlapping PG: 0
+Number of cells violating core area: 0
+Total number of cells violating plan group or core area: 0
+Transferring Data to Milkyway ...
+*** global placement done.
+Begin Overlap Removal...
+Reference Point: Lower Left-hand corner of Core Base Array
+Derived Core Area : (0.000 0.000) (243.978 243.394) is different from CEL Core Area (0.000 0.000) (243.978 243.452).
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+Information: Running legalization in Fast-Mode! (DPI-029)
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 19:58:35 2026
+****************************************
+Std cell utilization: 98.46%  (1256257/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 98.46%  (1256257/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1256257  sites, (non-fixed:1256257 fixed:0)
+                      92233    cells, (non-fixed:92233  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       251 
+Avg. std cell width:  1.14 um 
+Site array:           unit     (width: 0.07 um, height: 0.60 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 19:58:35 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 92233 illegal cells...
+Starting legalizer.
+Warning: Density is 98.5% (PSYN-1010)
+Initial legalization:  100% (11 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.5 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (2.2 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (2.0 sec)
+Legalization complete (38 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 19:59:36 2026
+****************************************
+
+avg cell displacement:    1.043 um ( 1.74 row height)
+max cell displacement:    3.831 um ( 6.39 row height)
+std deviation:            0.597 um ( 1.00 row height)
+number of cell moved:     92233 cells (out of 92233 cells)
+
+Largest displacement cells:
+  Cell: backend/store/U3517 (SAEDRVT14_INV_S_0P5)
+    Input location: (46.347 103.295)
+    Legal location: (44.326 100.040)
+    Displacement: 3.831 um, e.g. 6.39 row height.
+  Cell: backend/store/U25139 (SAEDRVT14_NR2_1P5)
+    Input location: (167.118 178.772)
+    Legal location: (168.720 181.810)
+    Displacement: 3.435 um, e.g. 5.72 row height.
+  Cell: backend/store/clk_gate_arr_reg_3076_/main_gate (SAEDRVT14_AN2_MM_1)
+    Input location: (167.411 186.650)
+    Legal location: (169.238 189.358)
+    Displacement: 3.267 um, e.g. 5.44 row height.
+  Cell: backend/store/U27651 (SAEDRVT14_NR2_1P5)
+    Input location: (51.231 72.011)
+    Legal location: (48.396 70.448)
+    Displacement: 3.237 um, e.g. 5.40 row height.
+  Cell: backend/store/U7404 (SAEDRVT14_AOI22_0P5)
+    Input location: (33.913 71.626)
+    Legal location: (31.820 69.190)
+    Displacement: 3.212 um, e.g. 5.35 row height.
+  Cell: backend/store/U22738 (SAEDRVT14_BUF_S_2)
+    Input location: (149.978 25.483)
+    Legal location: (153.032 24.560)
+    Displacement: 3.190 um, e.g. 5.32 row height.
+  Cell: backend/store/U3775 (SAEDRVT14_BUF_S_0P75)
+    Input location: (154.901 166.637)
+    Legal location: (156.732 169.230)
+    Displacement: 3.174 um, e.g. 5.29 row height.
+  Cell: backend/store/U7263 (SAEDRVT14_AOI22_0P5)
+    Input location: (140.597 56.159)
+    Legal location: (142.968 54.094)
+    Displacement: 3.144 um, e.g. 5.24 row height.
+  Cell: backend/store/clk_gate_arr_reg_1406_/main_gate (SAEDRVT14_AN2_MM_1)
+    Input location: (158.519 58.502)
+    Legal location: (160.432 56.010)
+    Displacement: 3.142 um, e.g. 5.24 row height.
+  Cell: backend/store/clk_gate_arr_reg_545_/main_gate (SAEDRVT14_AN2_MM_1)
+    Input location: (159.985 22.520)
+    Legal location: (162.874 21.386)
+    Displacement: 3.104 um, e.g. 5.17 row height.
+
+Total 10056 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+Information: Fast-Mode Legalization Done! (DPI-030)
+Completed Overlap Removal.
+1
+derive_pg_connection -power_net {VDD} -ground_net {VSS} -power_pin {VDD} -ground_pin {VSS}
+Information: connected 0 power ports and 0 ground ports
+1
+derive_pg_connection -power_net {VDD} -ground_net {VSS} -power_pin {VDD} -ground_pin {VSS} -tie
+reconnected total 0 tie highs and 0 tie lows
+1
+if {[info exists env(QR_MAXFO)]} { set_max_fanout $env(QR_MAXFO) [current_design] }
+place_opt -effort high -congestion -continue_on_missing_scandef
+Information: linking reference library : /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/milkyway/saed14rvt.mw. (PSYN-878)
+
+  Linking design 'mkQRDecoder'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (3863 designs)            mkQRDecoder.CEL, etc
+  saed14rvt_base_ss0p72v125c (library) /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db
+
+Information: The design has horizontal rows, and Y-symmetry has been used for sites. (MWDC-217)
+Derived Core Area : (0 0) (243978 243394) is different from CEL Core Area (0 0) (243978 243452).
+Floorplan loading succeeded.
+Information: Using 4 cores for placement. (OPT-1505)
+Warning: Could not read any link_library files. The link_library setting {"saed14rvt_base_ss0p72v125c.db"} may be invalid. (UID-349)
+
+Warning: Library cell 'SAEDRVT14_FSDP_V2LP_1' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDP_V2_2' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDP_V2_0P5' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_4' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_2' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_1' could not be modeled for sequential mapping. (OPT-1201)
+  Loading design 'mkQRDecoder'
+
+
+
+
+Information: Library Manufacturing Grid(GridResolution) : 1
+Information: Time Unit from Milkyway design library: 'ns' 
+Information: Design Library and main library timing units are matched - 1.000 ns. 
+Information: Resistance Unit from Milkyway design library: 'Mohm' 
+Warning: Mismatch in the main library and the Milkyway library resistance units. In the main library it is 1.000 kohm and in the Milkyway design library it is 1000.000 kohm. Check and correct the resistance units in the .tf and .db files. (PSYN-476)
+Information: Capacitance Unit from Milkyway design library: 'pf' 
+Information: Design Library and main library capacitance units are matched - 1.000 pf. 
+
+TLU+ File = /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_TECH_DATA/tlup/saed14nm_1p9m_Cmax.tlup
+TLU+ File = /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_TECH_DATA/tlup/saed14nm_1p9m_Cmin.tlup
+
+--------- Sanity Check on TLUPlus Files -------------
+1. Checking the conducting layer names in ITF and mapping file ... 
+[ Passed! ]
+2. Checking the via layer names in ITF and mapping file ... 
+[ Passed! ]
+3. Checking the consistency of Min Width and Min Spacing between MW-tech and ITF ... 
+Warning: minSpacing value of layer "M1" (metal1) does not match : ITF (0.050) vs MW-tech (0.026). (TLUP-005)
+Warning: minWidth value of layer "M1" (metal1) does not match : ITF (0.030) vs MW-tech (0.034). (TLUP-004)
+Warning: minSpacing value of layer "M2" (metal2) does not match : ITF (0.060) vs MW-tech (0.026). (TLUP-005)
+Warning: minWidth value of layer "M2" (metal2) does not match : ITF (0.030) vs MW-tech (0.034). (TLUP-004)
+Warning: minSpacing value of layer "M3" (metal3) does not match : ITF (0.060) vs MW-tech (0.026). (TLUP-005)
+Warning: minWidth value of layer "M3" (metal3) does not match : ITF (0.030) vs MW-tech (0.034). (TLUP-004)
+Warning: minSpacing value of layer "M4" (metal4) does not match : ITF (0.060) vs MW-tech (0.040). (TLUP-005)
+Warning: minWidth value of layer "M4" (metal4) does not match : ITF (0.030) vs MW-tech (0.060). (TLUP-004)
+Warning: minSpacing value of layer "M5" (metal5) does not match : ITF (0.060) vs MW-tech (0.040). (TLUP-005)
+Warning: minWidth value of layer "M5" (metal5) does not match : ITF (0.030) vs MW-tech (0.060). (TLUP-004)
+Warning: minSpacing value of layer "M6" (metal6) does not match : ITF (0.060) vs MW-tech (0.040). (TLUP-005)
+Warning: minWidth value of layer "M6" (metal6) does not match : ITF (0.030) vs MW-tech (0.060). (TLUP-004)
+Warning: minSpacing value of layer "M7" (metal7) does not match : ITF (0.060) vs MW-tech (0.040). (TLUP-005)
+Warning: minWidth value of layer "M7" (metal7) does not match : ITF (0.030) vs MW-tech (0.060). (TLUP-004)
+Warning: minSpacing value of layer "M8" (metal8) does not match : ITF (0.060) vs MW-tech (0.040). (TLUP-005)
+Warning: minWidth value of layer "M8" (metal8) does not match : ITF (0.030) vs MW-tech (0.060). (TLUP-004)
+Warning: minSpacing value of layer "M9" (metal9) does not match : ITF (0.060) vs MW-tech (0.040). (TLUP-005)
+Warning: minWidth value of layer "M9" (metal9) does not match : ITF (0.030) vs MW-tech (0.060). (TLUP-004)
+----------------- Check Ends ------------------
+****************************************************************
+Information: TLUPlus based RC computation is enabled. (RCEX-141)
+****************************************************************
+Information: The distance unit in Capacitance and Resistance is 1 micron. (RCEX-007)
+Information: The RC model used is TLU+. (RCEX-015)
+Information: Library Derived Cap for layer M1 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M1 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M2 : 0.00025 0.00021 (RCEX-011)
+Information: Library Derived Res for layer M2 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M3 : 0.00023 0.0002 (RCEX-011)
+Information: Library Derived Res for layer M3 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M4 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M4 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M5 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M5 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M6 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M6 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M7 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M7 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M8 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M8 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M9 : 0.00042 0.00033 (RCEX-011)
+Information: Library Derived Res for layer M9 : 0.0047 0.0047 (RCEX-011)
+Information: Library Derived Cap for layer MRDL : 0.00012 0.00012 (RCEX-011)
+Information: Library Derived Res for layer MRDL : 0.00018 0.00018 (RCEX-011)
+Information: Library Derived Horizontal Cap : 0.00028 0.00024 (RCEX-011)
+Information: Library Derived Horizontal Res : 0.0028 0.0028 (RCEX-011)
+Information: Library Derived Vertical Cap : 0.00022 0.0002 (RCEX-011)
+Information: Library Derived Vertical Res : 0.0016 0.0016 (RCEX-011)
+Information: Using derived R and C coefficients. (RCEX-008)
+Information: Using region-based R and C coefficients. (RCEX-013)
+Information: Library Derived Via Res : 0.00051 0.00051 (RCEX-011)
+
+  Beginning Coarse Placement (Congestion Driven)
+  ---------------------------------------------
+
+Information: Running stand-alone coarse placer in a separate process using temp directory '/tmp'. (PSYN-605)
+Warning: Scan DEF information is required. (PSYN-1099)
+...14%...29%...43%...57%...71%...86%...100% done.
+Information: Running stand-alone coarse placer in a separate process using temp directory '/tmp'. (PSYN-605)
+Warning: Scan DEF information is required. (PSYN-1099)
+Information: Running stand-alone coarse placer in a separate process using temp directory '/tmp'. (PSYN-605)
+Warning: Scan DEF information is required. (PSYN-1099)
+43%...57%...71%...86%...100% done.
+
+  Coarse Placement Complete
+  --------------------------
+
+Information: Updating database...
+Information: Using 4 cores for timing computations. (TIM-270)
+Information: Updating design information... (UID-85)
+Warning: Design 'mkQRDecoder' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Warning: Could not read any link_library files. The link_library setting {"saed14rvt_base_ss0p72v125c.db"} may be invalid. (UID-349)
+
+  Loading design 'mkQRDecoder'
+
+
+
+
+Information: Library Manufacturing Grid(GridResolution) : 1
+Information: Time Unit from Milkyway design library: 'ns' 
+Information: Design Library and main library timing units are matched - 1.000 ns. 
+Information: Resistance Unit from Milkyway design library: 'Mohm' 
+Warning: Mismatch in the main library and the Milkyway library resistance units. In the main library it is 1.000 kohm and in the Milkyway design library it is 1000.000 kohm. Check and correct the resistance units in the .tf and .db files. (PSYN-476)
+Information: Capacitance Unit from Milkyway design library: 'pf' 
+Information: Design Library and main library capacitance units are matched - 1.000 pf. 
+****************************************************************
+Information: TLUPlus based RC computation is enabled. (RCEX-141)
+****************************************************************
+Information: The distance unit in Capacitance and Resistance is 1 micron. (RCEX-007)
+Information: The RC model used is TLU+. (RCEX-015)
+Information: Library Derived Cap for layer M1 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M1 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M2 : 0.00025 0.00021 (RCEX-011)
+Information: Library Derived Res for layer M2 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M3 : 0.00023 0.0002 (RCEX-011)
+Information: Library Derived Res for layer M3 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M4 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M4 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M5 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M5 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M6 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M6 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M7 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M7 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M8 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M8 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M9 : 0.00042 0.00033 (RCEX-011)
+Information: Library Derived Res for layer M9 : 0.0047 0.0047 (RCEX-011)
+Information: Library Derived Cap for layer MRDL : 0.00012 0.00012 (RCEX-011)
+Information: Library Derived Res for layer MRDL : 0.00018 0.00018 (RCEX-011)
+Information: Library Derived Horizontal Cap : 0.00028 0.00024 (RCEX-011)
+Information: Library Derived Horizontal Res : 0.0028 0.0028 (RCEX-011)
+Information: Library Derived Vertical Cap : 0.00022 0.0002 (RCEX-011)
+Information: Library Derived Vertical Res : 0.0016 0.0016 (RCEX-011)
+Information: Using derived R and C coefficients. (RCEX-008)
+Information: Using region-based R and C coefficients. (RCEX-013)
+Information: Library Derived Via Res : 0.00051 0.00051 (RCEX-011)
+
+
+  Beginning High Fanout Net Synthesis
+  -----------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:00:27   55777.5      0.65      14.6   34163.0                                0.00  
+ Estimating Design ...... 
+ Done
+
+ Updating Timing ........ 
+ Done
+
+
+ Beginning Buffering Optimizations
+ ---------------------------------
+
+ Collecting Buffer Trees ... Found 807
+
+ Processing Buffer Trees ... 
+
+    [81]  10% ...
+    [162]  20% ...
+    [243]  30% ...
+    [324]  40% ...
+    [405]  50% ...
+    [486]  60% ...
+    [567]  70% ...
+    [648]  80% ...
+    [729]  90% ...
+    [807] 100% Done ...
+
+
+Information: Automatic high-fanout synthesis deletes 8491 cells. (HFS-802)
+Information: Automatic high-fanout synthesis adds 1997 new cells. (PSYN-864)
+
+
+Information: Analyzing channel congestion ... 
+Information: Channel congestion analysis found no blockages
+
+
+ Estimating Design ...... 
+ Done
+
+
+  Legalizing Placement
+  --------------------
+
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:06:11 2026
+****************************************
+Std cell utilization: 94.74%  (1208861/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 94.74%  (1208861/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1208861  sites, (non-fixed:1208861 fixed:0)
+                      85739    cells, (non-fixed:85739  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       256 
+Avg. std cell width:  1.11 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:06:11 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 85717 illegal cells...
+Starting legalizer.
+Initial legalization:  100% (3 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.5 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.9 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.5 sec)
+Legalization complete (23 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:06:49 2026
+****************************************
+
+avg cell displacement:    0.312 um ( 0.52 row height)
+max cell displacement:    2.068 um ( 3.45 row height)
+std deviation:            0.242 um ( 0.40 row height)
+number of cell moved:     85516 cells (out of 85739 cells)
+
+Largest displacement cells:
+  Cell: backend/store/U1323 (SAEDRVT14_INV_0P5)
+    Input location: (81.363 94.350)
+    Legal location: (80.586 96.266)
+    Displacement: 2.068 um, e.g. 3.45 row height.
+  Cell: backend/store/U26793 (SAEDRVT14_NR2_1P5)
+    Input location: (33.124 115.136)
+    Legal location: (32.412 116.994)
+    Displacement: 1.990 um, e.g. 3.32 row height.
+  Cell: backend/store/U286 (SAEDRVT14_BUF_CDC_2)
+    Input location: (88.578 88.718)
+    Legal location: (89.244 90.576)
+    Displacement: 1.974 um, e.g. 3.29 row height.
+  Cell: backend/store/U15488 (SAEDRVT14_AN4_1)
+    Input location: (111.768 211.315)
+    Legal location: (111.444 213.260)
+    Displacement: 1.972 um, e.g. 3.29 row height.
+  Cell: backend/store/U1409 (SAEDRVT14_BUF_CDC_2)
+    Input location: (131.424 59.784)
+    Legal location: (131.720 57.868)
+    Displacement: 1.939 um, e.g. 3.23 row height.
+  Cell: backend/store/U18457 (SAEDRVT14_AOI22_0P5)
+    Input location: (137.616 63.558)
+    Legal location: (137.788 61.642)
+    Displacement: 1.924 um, e.g. 3.21 row height.
+  Cell: backend/store/U5967 (SAEDRVT14_AOI22_0P5)
+    Input location: (100.516 223.924)
+    Legal location: (100.566 225.840)
+    Displacement: 1.917 um, e.g. 3.19 row height.
+  Cell: backend/store/clk_gate_arr_reg_1533_/main_gate (SAEDRVT14_AN2_MM_1)
+    Input location: (71.929 30.160)
+    Legal location: (73.334 28.934)
+    Displacement: 1.865 um, e.g. 3.11 row height.
+  Cell: backend/store/clk_gate_arr_reg_1761_/main_gate (SAEDRVT14_AN2_MM_1)
+    Input location: (89.010 108.038)
+    Legal location: (90.502 106.930)
+    Displacement: 1.858 um, e.g. 3.10 row height.
+  Cell: backend/store/U30348 (SAEDRVT14_AOI22_0P5)
+    Input location: (64.640 76.738)
+    Legal location: (64.602 74.880)
+    Displacement: 1.858 um, e.g. 3.10 row height.
+
+Total 10 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+
+  Placement Legalization Complete
+  -------------------------------
+
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Information: Updating database...
+Information: RC extraction has been freed. (PSYN-503)
+Running router in separate process ...
+Router separate process finished successfully.
+Warning: Could not read any link_library files. The link_library setting {"saed14rvt_base_ss0p72v125c.db"} may be invalid. (UID-349)
+
+  Loading design 'mkQRDecoder'
+
+
+
+
+Information: Library Manufacturing Grid(GridResolution) : 1
+Information: Time Unit from Milkyway design library: 'ns' 
+Information: Design Library and main library timing units are matched - 1.000 ns. 
+Information: Resistance Unit from Milkyway design library: 'Mohm' 
+Warning: Mismatch in the main library and the Milkyway library resistance units. In the main library it is 1.000 kohm and in the Milkyway design library it is 1000.000 kohm. Check and correct the resistance units in the .tf and .db files. (PSYN-476)
+Information: Capacitance Unit from Milkyway design library: 'pf' 
+Information: Design Library and main library capacitance units are matched - 1.000 pf. 
+Warning: Inconsistent library data found for layer PO. (RCEX-018)
+Information: The distance unit in Capacitance and Resistance is 1 micron. (RCEX-007)
+Information: The RC model used is detail route TLU+. (RCEX-015)
+Information: Start mixed mode parasitic extraction. (RCEX-023)
+Information: Start rc extraction...
+EKL_MT: Max number of thread is 16
+Information: extraction with 4 threads (RCEX-208)
+sh: line 1: 3512087 Segmentation fault      (core dumped) /home/tools/pd_tools/icc/V-2023.12/linux64/syn/bin/ekl_main 400 /tmp/tmp_varaha-eda.cs.iitm.ac.in_1284_3377297/.rrr.VAC5PU /tmp/tmp_varaha-eda.cs.iitm.ac.in_1284_3377297/.extrRJIoSb 3377297 /tmp/tmp_varaha-eda.cs.iitm.ac.in_1284_3377297/.rrr.WRAnGd 1 /tmp/tmp_varaha-eda.cs.iitm.ac.in_1284_3377297/.eklmvGR4oI > /tmp/.ekl_main-3377297
+
+Starting a non page replacement mode Milkyway db session... 
+EKL_MT: Max number of thread is 16
+EKL_MT: max_num_of_threads = 4
+Information: TLU+ child process terminated abnormally. (RCEX-210)
+  Unknown error while talking to process
+Information: Use working path as $TMPDIR for current extraction. (RCEX-209)
+Information: Start rc extraction...
+EKL_MT: Max number of thread is 16
+Information: extraction with 4 threads (RCEX-208)
+EKL_MT: Max number of thread is 16
+EKL_MT: max_num_of_threads = 4
+EKL_MT: total threadable CPU 37.81(= 11.84 + 7.14 + 7.29 + 11.54) seconds
+EKL_MT: elapsed time 26 seconds
+
+Starting a non page replacement mode Milkyway db session... 
+Warning: Net 'CLK' is exceeding threshold (over 1000 pins) and will be skipped. (RCEX-020)
+Information: Parasitic source is LPE. (RCEX-040)
+Information: Parasitic mode is RealRC. (RCEX-041)
+Information: Using virtual shield extraction. (RCEX-081)
+Information: Extraction mode is MIN_MAX. (RCEX-042)
+Information: Extraction derate is 125/125/125. (RCEX-043)
+Information: Coupling capacitances are lumped to ground. (RCEX-044)
+Information: Start back annotation for parasitic extraction. (RCEX-023)
+Information: End back annotation for parasitic extraction. (RCEX-023)
+Information: Start timing update for parasitic extraction. (RCEX-023)
+Information: End timing update for parasitic extraction. (RCEX-023)
+Information: End parasitic extraction. (RCEX-023)
+Warning: Could not read any link_library files. The link_library setting {"saed14rvt_base_ss0p72v125c.db"} may be invalid. (UID-349)
+
+  Loading design 'mkQRDecoder'
+Warning: Design 'mkQRDecoder' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+
+
+
+
+****************************************************************
+Information: TLUPlus based RC computation is enabled. (RCEX-141)
+****************************************************************
+Information: The distance unit in Capacitance and Resistance is 1 micron. (RCEX-007)
+Information: The RC model used is TLU+. (RCEX-015)
+Information: Library Derived Cap for layer M1 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M1 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M2 : 0.00025 0.00021 (RCEX-011)
+Information: Library Derived Res for layer M2 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M3 : 0.00023 0.0002 (RCEX-011)
+Information: Library Derived Res for layer M3 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M4 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M4 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M5 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M5 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M6 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M6 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M7 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M7 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M8 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M8 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M9 : 0.00042 0.00033 (RCEX-011)
+Information: Library Derived Res for layer M9 : 0.0047 0.0047 (RCEX-011)
+Information: Library Derived Cap for layer MRDL : 0.00012 0.00012 (RCEX-011)
+Information: Library Derived Res for layer MRDL : 0.00018 0.00018 (RCEX-011)
+Information: Library Derived Horizontal Cap : 0.00028 0.00024 (RCEX-011)
+Information: Library Derived Horizontal Res : 0.0028 0.0028 (RCEX-011)
+Information: Library Derived Vertical Cap : 0.00022 0.0002 (RCEX-011)
+Information: Library Derived Vertical Res : 0.0016 0.0016 (RCEX-011)
+Information: Using derived R and C coefficients. (RCEX-008)
+Information: Using region-based R and C coefficients. (RCEX-013)
+Information: Library Derived Via Res : 0.00051 0.00051 (RCEX-011)
+Done with auto pattern creation
+Successfully removed route by type
+
+The options for place_opt:
+--------------------------
+POPT:  place_opt effort level               : high
+POPT:  Congestion removal                   : Yes
+POPT:  Layer Optimization                   : Yes
+POPT:  Area recovery                        : No
+POPT:  Optimize dft                         : No
+POPT:  Clock Tree Synthesis                 : No
+POPT:  Optimize power                       : No
+POPT:  Skip initial placement               : Yes
+---------------------------------------------------
+
+Settings of some common used Tcl variables for place_opt:
+---------------------------------------------------------
+---------------------------------------------------------
+Information: Using 4 cores for placement. (OPT-1505)
+Warning: Could not read any link_library files. The link_library setting {"saed14rvt_base_ss0p72v125c.db"} may be invalid. (UID-349)
+
+  Loading design 'mkQRDecoder'
+
+
+
+
+Information: Library Manufacturing Grid(GridResolution) : 1
+Information: Time Unit from Milkyway design library: 'ns' 
+Information: Design Library and main library timing units are matched - 1.000 ns. 
+Information: Resistance Unit from Milkyway design library: 'Mohm' 
+Warning: Mismatch in the main library and the Milkyway library resistance units. In the main library it is 1.000 kohm and in the Milkyway design library it is 1000.000 kohm. Check and correct the resistance units in the .tf and .db files. (PSYN-476)
+Information: Capacitance Unit from Milkyway design library: 'pf' 
+Information: Design Library and main library capacitance units are matched - 1.000 pf. 
+****************************************************************
+Information: TLUPlus based RC computation is enabled. (RCEX-141)
+****************************************************************
+Information: The distance unit in Capacitance and Resistance is 1 micron. (RCEX-007)
+Information: The RC model used is TLU+. (RCEX-015)
+Information: Library Derived Cap for layer M1 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M1 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M2 : 0.00025 0.00021 (RCEX-011)
+Information: Library Derived Res for layer M2 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M3 : 0.00023 0.0002 (RCEX-011)
+Information: Library Derived Res for layer M3 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M4 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M4 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M5 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M5 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M6 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M6 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M7 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M7 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M8 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M8 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M9 : 0.00042 0.00033 (RCEX-011)
+Information: Library Derived Res for layer M9 : 0.0047 0.0047 (RCEX-011)
+Information: Library Derived Cap for layer MRDL : 0.00012 0.00012 (RCEX-011)
+Information: Library Derived Res for layer MRDL : 0.00018 0.00018 (RCEX-011)
+Information: Library Derived Horizontal Cap : 0.00028 0.00024 (RCEX-011)
+Information: Library Derived Horizontal Res : 0.0028 0.0028 (RCEX-011)
+Information: Library Derived Vertical Cap : 0.00022 0.0002 (RCEX-011)
+Information: Library Derived Vertical Res : 0.0016 0.0016 (RCEX-011)
+Information: Using derived R and C coefficients. (RCEX-008)
+Information: Using region-based R and C coefficients. (RCEX-013)
+Information: Library Derived Via Res : 0.00051 0.00051 (RCEX-011)
+                  Incremental high fanout optimization starts
+=============================================================
+
+ Collecting Buffer Trees ... Found 0
+
+               Incremental high fanout optimization completes
+=============================================================
+
+  ------------------------------------------
+  Automatic minimum/maximum layer assignment
+  ------------------------------------------
+    Derived Minimum Lower Layer   : M4
+    Derived Maximum Upper Layer   : MRDL
+  ------------------------------------------
+Information: Updating database...
+  Total 182 nets to be assigned.
+  Total 175 nets assigned with min/max constraint.
+  Total 175 nets assigned with min/max constraint by tool.
+Information: RC extraction has been freed. (PSYN-503)
+Running router in separate process ...
+Router separate process finished successfully.
+****************************************************************
+Information: TLUPlus based RC computation is enabled. (RCEX-141)
+****************************************************************
+Information: The distance unit in Capacitance and Resistance is 1 micron. (RCEX-007)
+Information: The RC model used is TLU+. (RCEX-015)
+Information: Library Derived Cap for layer M1 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M1 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M2 : 0.00025 0.00021 (RCEX-011)
+Information: Library Derived Res for layer M2 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M3 : 0.00023 0.0002 (RCEX-011)
+Information: Library Derived Res for layer M3 : 0.0029 0.0029 (RCEX-011)
+Information: Library Derived Cap for layer M4 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M4 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M5 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M5 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M6 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M6 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M7 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M7 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M8 : 0.00025 0.00022 (RCEX-011)
+Information: Library Derived Res for layer M8 : 0.0017 0.0017 (RCEX-011)
+Information: Library Derived Cap for layer M9 : 0.00042 0.00033 (RCEX-011)
+Information: Library Derived Res for layer M9 : 0.0047 0.0047 (RCEX-011)
+Information: Library Derived Cap for layer MRDL : 0.00012 0.00012 (RCEX-011)
+Information: Library Derived Res for layer MRDL : 0.00018 0.00018 (RCEX-011)
+Information: Library Derived Horizontal Cap : 0.00028 0.00024 (RCEX-011)
+Information: Library Derived Horizontal Res : 0.0028 0.0028 (RCEX-011)
+Information: Library Derived Vertical Cap : 0.00022 0.0002 (RCEX-011)
+Information: Library Derived Vertical Res : 0.0016 0.0016 (RCEX-011)
+Information: Using derived R and C coefficients. (RCEX-008)
+Information: Using region-based R and C coefficients. (RCEX-013)
+Information: Library Derived Via Res : 0.00051 0.00051 (RCEX-011)
+  Total 46 nets assigned with min/max constraint based on global route refinement.
+Successfully removed route by type
+
+
+
+
+
+  Design  WNS: 0.10  TNS: 4.54  Number of Violating Paths: 90
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 53673.4
+  Total fixed cell area: 0.0
+  Total physical cell area: 53673.4
+  Core area: (0 0 243978 243452)
+
+
+  No hold constraints
+
+
+  Timing and DRC Optimization (Stage 1)
+  --------------------------------------
+
+
+
+  Beginning Timing Optimizations
+  ------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:03:55   53673.2      0.10       4.5   35579.1                                0.00  
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+
+
+  Beginning Timing Optimizations
+  ------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:04:02   53673.2      0.10       4.5   35579.1                                0.00  
+    0:04:21   53677.2      0.00       0.0   35578.8                                0.00  
+    0:04:51   53618.9      0.01       0.0   35589.3                                0.00  
+    0:04:55   53618.9      0.01       0.0   35589.3                                0.00  
+    0:04:56   53619.7      0.00       0.0   35589.3                                0.00  
+    0:04:56   53619.7      0.00       0.0   35589.3                                0.00  
+    0:05:00   53619.7      0.00       0.0   35589.3                                0.00  
+    0:05:53   52856.9      0.01       0.0   36301.9                                0.00  
+    0:05:53   52856.9      0.01       0.0   36301.9                                0.00  
+    0:05:56   52812.3      0.05       0.4   36284.7                                0.00  
+    0:05:56   52812.3      0.05       0.4   36284.7                                0.00  
+    0:05:59   52819.8      0.00       0.0   36284.7                                0.00  
+    0:05:59   52819.8      0.00       0.0   36284.7                                0.00  
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+
+  Design  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52820.1
+  Total fixed cell area: 0.0
+  Total physical cell area: 52820.1
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+
+
+
+
+  Beginning Coarse Placement (Congestion Driven)
+  ---------------------------------------------
+
+Information: Running stand-alone coarse placer in a separate process using temp directory '/tmp'. (PSYN-605)
+Warning: Scan DEF information is required. (PSYN-1099)
+100% done.
+40%...50%...60%...70%...80%...90%...100% done.
+
+  Coarse Placement Complete
+  --------------------------
+
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:21:35 2026
+****************************************
+Std cell utilization: 93.24%  (1189642/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 93.24%  (1189642/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1189642  sites, (non-fixed:1189642 fixed:0)
+                      85523    cells, (non-fixed:85523  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       235 
+Avg. std cell width:  1.06 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:21:35 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 85508 illegal cells...
+Starting legalizer.
+Initial legalization:  100% (2 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.4 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (2.1 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.6 sec)
+Legalization complete (14 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:22:03 2026
+****************************************
+
+avg cell displacement:    0.210 um ( 0.35 row height)
+max cell displacement:    1.415 um ( 2.36 row height)
+std deviation:            0.165 um ( 0.27 row height)
+number of cell moved:     85273 cells (out of 85523 cells)
+
+Total 0 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+
+Information: Analyzing channel congestion ... 
+Information: Channel congestion analysis found no blockages
+
+
+
+
+
+
+
+  Design  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52820.1
+  Total fixed cell area: 0.0
+  Total physical cell area: 52820.1
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  Timing and DRC Optimization (Stage 1)
+  --------------------------------------
+
+
+
+  Beginning Timing Optimizations
+  ------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:09:52   52819.8      0.00       0.0   51518.5                                0.00  
+
+
+  Beginning Area-Recovery Phase  (cleanup)
+  -----------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:09:55   52819.8      0.00       0.0   51518.5                                0.00  
+    0:09:56   52819.8      0.00       0.0   51518.5                                0.00  
+    0:10:11   52812.8      0.00       0.0   51518.4                                0.00  
+    0:10:13   52812.8      0.00       0.0   51518.4                                0.00  
+    0:10:13   52812.8      0.00       0.0   51518.4                                0.00  
+    0:10:13   52812.8      0.00       0.0   51518.4                                0.00  
+    0:10:14   52812.8      0.00       0.0   51518.4                                0.00  
+    0:10:42   52395.3      0.00       0.0   51601.6                                0.00  
+    0:10:42   52395.3      0.00       0.0   51601.6                                0.00  
+    0:10:43   52393.6      0.00       0.0   51602.0                                0.00  
+    0:10:43   52393.6      0.00       0.0   51602.0                                0.00  
+    0:10:48   52396.6      0.00       0.0   51600.9                                0.00  
+    0:10:48   52396.6      0.00       0.0   51600.9                                0.00  
+    0:10:50   52396.6      0.00       0.0   51600.9                                0.00  
+    0:11:08   52396.1      0.00       0.0   51600.9                                0.00  
+    0:11:10   52396.1      0.00       0.0   51600.9                                0.00  
+    0:11:10   52396.1      0.00       0.0   51600.9                                0.00  
+    0:11:10   52396.1      0.00       0.0   51600.9                                0.00  
+    0:11:11   52396.1      0.00       0.0   51600.9                                0.00  
+    0:11:19   52376.3      0.00       0.0   51616.2                                0.00  
+    0:11:19   52376.3      0.00       0.0   51616.2                                0.00  
+    0:11:19   52376.0      0.01       0.0   51616.2                                0.00  
+    0:11:19   52376.0      0.01       0.0   51616.2                                0.00  
+    0:11:22   52377.5      0.00       0.0   51616.2                                0.00  
+    0:11:22   52377.5      0.00       0.0   51616.2                                0.00  
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+
+  Placement Optimization (Stage 1) (Congestion Driven)
+  -----------------------------------------------------
+
+Information: Running stand-alone coarse placer in a separate process using temp directory '/tmp'. (PSYN-605)
+100% done.
+62%...69%...77%...85%...92%...100% done.
+
+Information: Analyzing channel congestion ... 
+Information: Channel congestion analysis found no blockages
+
+
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:26:12 2026
+****************************************
+Std cell utilization: 92.46%  (1179683/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 92.46%  (1179683/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1179683  sites, (non-fixed:1179683 fixed:0)
+                      85490    cells, (non-fixed:85490  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       205 
+Avg. std cell width:  1.04 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:26:12 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 85473 illegal cells...
+Starting legalizer.
+Initial legalization:  100% (3 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.4 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.6 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1.4 sec)
+Legalization complete (15 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:26:42 2026
+****************************************
+
+avg cell displacement:    0.206 um ( 0.34 row height)
+max cell displacement:    1.457 um ( 2.43 row height)
+std deviation:            0.161 um ( 0.27 row height)
+number of cell moved:     85287 cells (out of 85490 cells)
+
+Total 0 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+
+  Placement Optimization Complete
+  -------------------------------
+
+
+  Design  WNS: 0.34  TNS: 22.34  Number of Violating Paths: 146
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52377.9
+  Total fixed cell area: 0.0
+  Total physical cell area: 52377.9
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  Timing and DRC Optimization (Stage 2)
+  --------------------------------------
+
+
+
+  Beginning Timing Optimizations
+  ------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:14:23   52377.7      0.01       0.0   51262.8                                0.00  
+    0:15:06   52374.1      0.00       0.0   51262.9                                0.00  
+    0:15:44   52364.4      0.00       0.0   51270.6                                0.00  
+    0:15:46   52350.3      0.00       0.0   51304.0                                0.00  
+    0:15:50   52331.6      0.00       0.0   51330.1                                0.00  
+    0:15:59   52332.1      0.00       0.0   51330.1                                0.00  
+    0:16:00   52332.1      0.00       0.0   51330.1                                0.00  
+    0:16:00   52332.1      0.00       0.0   51330.1                                0.00  
+    0:16:00   52332.1      0.00       0.0   51330.1                                0.00  
+    0:16:01   52332.1      0.00       0.0   51330.1                                0.00  
+    0:16:06   52308.5      0.00       0.0   51348.9                                0.00  
+    0:16:06   52308.5      0.00       0.0   51348.9                                0.00  
+    0:16:07   52307.2      0.03       0.2   51348.9                                0.00  
+    0:16:07   52307.2      0.03       0.2   51348.9                                0.00  
+    0:16:07   52307.5      0.00       0.0   51347.7                                0.00  
+    0:16:07   52307.5      0.00       0.0   51347.7                                0.00  
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+
+  Placement Optimization (Stage 2) (Congestion Driven)
+  -----------------------------------------------------
+
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:29:06 2026
+****************************************
+Std cell utilization: 92.33%  (1178107/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 92.33%  (1178107/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1178107  sites, (non-fixed:1178107 fixed:0)
+                      85491    cells, (non-fixed:85491  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       191 
+Avg. std cell width:  0.99 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:29:06 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 10 illegal cells...
+Starting legalizer.
+Initial legalization:  10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Legalization complete (2 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:29:08 2026
+****************************************
+
+avg cell displacement:    0.190 um ( 0.32 row height)
+max cell displacement:    0.658 um ( 1.10 row height)
+std deviation:            0.119 um ( 0.20 row height)
+number of cell moved:        20 cells (out of 85491 cells)
+
+Total 0 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+
+  Placement Optimization Complete
+  -------------------------------
+
+
+  Design  WNS: 0.00  TNS: 0.14  Number of Violating Paths: 338
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52308.0
+  Total fixed cell area: 0.0
+  Total physical cell area: 52308.0
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  Timing and DRC Optimization (Stage 3)
+  --------------------------------------
+
+
+
+  Beginning Timing Optimizations
+  ------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:16:38   52307.7      0.00       0.0   51338.5                                0.00  
+    0:16:56   52308.2      0.00       0.0   51337.0                                0.00  
+    0:17:09   52306.8      0.00       0.0   51338.8                                0.00  
+    0:17:12   52304.7      0.00       0.0   51340.8                                0.00  
+    0:17:19   52304.9      0.00       0.0   51340.8                                0.00  
+    0:17:19   52304.9      0.00       0.0   51340.8                                0.00  
+    0:17:20   52305.2      0.00       0.0   51340.8                                0.00  
+    0:17:20   52305.2      0.00       0.0   51340.8                                0.00  
+    0:17:21   52305.2      0.00       0.0   51340.8                                0.00  
+    0:17:24   52300.8      0.00       0.0   51341.7                                0.00  
+    0:17:24   52300.8      0.00       0.0   51341.7                                0.00  
+    0:17:24   52300.4      0.01       0.1   51341.7                                0.00  
+    0:17:24   52300.4      0.01       0.1   51341.7                                0.00  
+    0:17:25   52301.3      0.00       0.0   51341.7                                0.00  
+    0:17:25   52301.3      0.00       0.0   51341.7                                0.00  
+
+
+  Beginning Area-Recovery Phase  (cleanup)
+  -----------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:17:25   52301.3      0.00       0.0   51341.7                                0.00  
+    0:17:26   52301.3      0.00       0.0   51341.7                                0.00  
+    0:17:28   52301.1      0.00       0.0   51341.7                                0.00  
+    0:17:28   52301.1      0.00       0.0   51341.7                                0.00  
+    0:17:28   52301.1      0.00       0.0   51341.7                                0.00  
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+
+  Placement Optimization (Stage 3) (Congestion Driven)
+  -----------------------------------------------------
+
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:30:27 2026
+****************************************
+Std cell utilization: 92.32%  (1177963/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 92.32%  (1177963/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1177963  sites, (non-fixed:1177963 fixed:0)
+                      85490    cells, (non-fixed:85490  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       194 
+Avg. std cell width:  0.98 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:30:27 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 23 illegal cells...
+Starting legalizer.
+Initial legalization:  10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Legalization complete (2 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:30:30 2026
+****************************************
+
+avg cell displacement:    0.175 um ( 0.29 row height)
+max cell displacement:    1.072 um ( 1.79 row height)
+std deviation:            0.155 um ( 0.26 row height)
+number of cell moved:        56 cells (out of 85490 cells)
+
+Total 0 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+
+  Placement Optimization Complete
+  -------------------------------
+
+
+  Design  WNS: 0.01  TNS: 0.44  Number of Violating Paths: 372
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52301.6
+  Total fixed cell area: 0.0
+  Total physical cell area: 52301.6
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+Warning: Core area is not integer multiples of min site height (600), object's width and height(243978,243452). (PSYN-523)
+
+**************************************************** 
+Check_legality: Report for Fixed Placement Cells
+Information: Use the -verbose option to get details about the legality violations. (PSYN-054)
+**************************************************** 
+(fixed placement) Cells Not on Row            : 0
+(fixed placement) Cell Overlaps               : 0
+(fixed placement) Cells overlapping blockages : 0
+(fixed placement) Orientation Violations      : 0
+(fixed placement) Site Violations             : 0
+(fixed placement) Power Strap Violations      : 0
+****************************************************** 
+
+****************************************************** 
+Check_legality: Report for Non-fixed Placement Cells
+Information: Use the -verbose option to get details about the legality violations. (PSYN-054)
+****************************************************** 
+Number of Cells Not on Row            : 0
+Number of Cell Overlaps               : 0
+Number of Cells overlapping blockages : 0
+Number of Orientation Violations      : 0
+Number of Site Violations             : 0
+Number of Power Strap Violations      : 0
+******************************************** 
+
+
+
+
+
+  Design  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 4
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52301.6
+  Total fixed cell area: 0.0
+  Total physical cell area: 52301.6
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  Timing and DRC Optimization (Stage 1)
+  --------------------------------------
+
+
+
+  Beginning Timing Optimizations
+  ------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:17:56   52301.2      0.00       0.0   51994.0                                0.00  
+    0:18:17   52301.6      0.00       0.0   51993.9                                0.00  
+    0:18:36   52299.0      0.00       0.0   52004.7                                0.00  
+    0:18:39   52291.7      0.00       0.0   52012.6                                0.00  
+    0:18:44   52291.7      0.00       0.0   52012.6                                0.00  
+    0:18:44   52291.7      0.00       0.0   52012.6                                0.00  
+    0:18:45   52291.7      0.00       0.0   52012.6                                0.00  
+    0:18:48   52285.7      0.01       0.0   52018.5                                0.00  
+    0:18:48   52285.7      0.01       0.0   52018.5                                0.00  
+    0:18:48   52283.6      0.01       0.1   52018.5                                0.00  
+    0:18:48   52283.6      0.01       0.1   52018.5                                0.00  
+    0:18:49   52285.8      0.00       0.0   52017.4                                0.00  
+    0:18:49   52285.8      0.00       0.0   52017.4                                0.00  
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+
+  Placement Optimization (Stage 1) (Congestion Driven)
+  -----------------------------------------------------
+
+Information: Running stand-alone coarse placer in a separate process using temp directory '/tmp'. (PSYN-605)
+Skipping placement due to "placer_skip_cgpl" setting...
+
+Information: Analyzing channel congestion ... 
+Information: Channel congestion analysis found no blockages
+
+
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:32:02 2026
+****************************************
+Std cell utilization: 92.29%  (1177620/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 92.29%  (1177620/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1177620  sites, (non-fixed:1177620 fixed:0)
+                      85492    cells, (non-fixed:85492  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       185 
+Avg. std cell width:  0.95 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:32:02 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 19 illegal cells...
+Starting legalizer.
+Initial legalization:  10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.1 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.1 sec)
+Legalization complete (2 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:32:06 2026
+****************************************
+
+avg cell displacement:    0.161 um ( 0.27 row height)
+max cell displacement:    0.794 um ( 1.32 row height)
+std deviation:            0.161 um ( 0.27 row height)
+number of cell moved:        71 cells (out of 85492 cells)
+
+Total 0 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+
+  Placement Optimization Complete
+  -------------------------------
+
+
+  Design  WNS: 0.33  TNS: 26.12  Number of Violating Paths: 543
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52286.3
+  Total fixed cell area: 0.0
+  Total physical cell area: 52286.3
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  Timing and DRC Optimization (Stage 2)
+  --------------------------------------
+
+
+
+  Beginning Timing Optimizations
+  ------------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:19:39   52286.0      0.01       0.0   52018.0                                0.00  
+    0:19:57   52285.9      0.00       0.0   52017.9                                0.00  
+    0:19:58   52285.7      0.00       0.0   52019.0                                0.00  
+    0:20:03   52285.7      0.00       0.0   52019.0                                0.00  
+    0:20:03   52285.7      0.00       0.0   52019.0                                0.00  
+    0:20:03   52285.7      0.00       0.0   52019.0                                0.00  
+    0:20:03   52285.7      0.00       0.0   52019.0                                0.00  
+    0:20:04   52285.7      0.00       0.0   52019.0                                0.00  
+    0:20:06   52285.5      0.00       0.0   52019.7                                0.00  
+    0:20:06   52285.5      0.00       0.0   52019.7                                0.00  
+    0:20:06   52284.6      0.01       0.1   52019.7                                0.00  
+    0:20:06   52284.6      0.01       0.1   52019.7                                0.00  
+    0:20:06   52285.8      0.00       0.0   52018.3                                0.00  
+    0:20:06   52285.8      0.00       0.0   52018.3                                0.00  
+
+
+  Beginning Area-Recovery Phase  (cleanup)
+  -----------------------------
+
+                                  TOTAL                                                  
+   ELAPSED            WORST NEG   SETUP    DESIGN                              MIN DELAY 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT             COST    
+  --------- --------- --------- --------- --------- ------------------------- -----------
+    0:20:06   52285.8      0.00       0.0   52018.3                                0.00  
+    0:20:06   52285.8      0.00       0.0   52018.3                                0.00  
+    0:20:09   52285.8      0.00       0.0   52018.3                                0.00  
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+
+  Placement Optimization (Stage 2) (Congestion Driven)
+  -----------------------------------------------------
+
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:33:07 2026
+****************************************
+Std cell utilization: 92.29%  (1177619/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 92.29%  (1177619/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1177619  sites, (non-fixed:1177619 fixed:0)
+                      85490    cells, (non-fixed:85490  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       186 
+Avg. std cell width:  0.95 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:33:07 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+Legalizing 13 illegal cells...
+Starting legalizer.
+Initial legalization:  10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (1 sec)
+Optimizations pass 1: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Optimizations pass 2: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Optimizations pass 3: 10% 20% 30% 40% 50% 60% 70% 80% 90% 100% (0.0 sec)
+Legalization complete (1 total sec)
+ 
+****************************************
+  Report : Legalize Displacement
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:33:10 2026
+****************************************
+
+avg cell displacement:    0.142 um ( 0.24 row height)
+max cell displacement:    0.658 um ( 1.10 row height)
+std deviation:            0.120 um ( 0.20 row height)
+number of cell moved:        46 cells (out of 85490 cells)
+
+Total 0 cells has large displacement (e.g. > 1.800 um or 3 row height)
+
+
+  Placement Optimization Complete
+  -------------------------------
+
+
+  Design  WNS: 0.00  TNS: 0.04  Number of Violating Paths: 320
+
+  Nets with DRC Violations: 0
+  Total moveable cell area: 52286.3
+  Total fixed cell area: 0.0
+  Total physical cell area: 52286.3
+  Core area: (0 0 243978 243452)
+
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+[begin initializing data for legality checker]
+
+Initializing Data Structure ...
+INFO: legalizer_via_spacing_check_mode 0
+  Reading technology information ...
+    Technology table contains 10 routable metal layers
+    This is considered as a 10-metal-layer design
+    Reading library information from DB ...
+  Reading misc information ...
+    array <unit> has 0 vertical and 387 horizontal rows
+    GRC ref loc X corrected
+    GRC ref loc Y corrected
+    100 pre-routes for placement blockage/checking
+    487 pre-routes for map congestion calculation
+  Checking information read in ...
+    design style = Horizontal masters, Horizontal rows
+
+  Preprocessing design ...
+    splitting rows by natural obstacles ...
+... design style 0
+... number of base array 1 0
+INFO:... use original rows...
+[end initializing data for legality checker]
+Warning: Core area is not integer multiples of min site height (600), object's width and height(243978,243452). (PSYN-523)
+
+**************************************************** 
+Check_legality: Report for Fixed Placement Cells
+Information: Use the -verbose option to get details about the legality violations. (PSYN-054)
+**************************************************** 
+(fixed placement) Cells Not on Row            : 0
+(fixed placement) Cell Overlaps               : 0
+(fixed placement) Cells overlapping blockages : 0
+(fixed placement) Orientation Violations      : 0
+(fixed placement) Site Violations             : 0
+(fixed placement) Power Strap Violations      : 0
+****************************************************** 
+
+****************************************************** 
+Check_legality: Report for Non-fixed Placement Cells
+Information: Use the -verbose option to get details about the legality violations. (PSYN-054)
+****************************************************** 
+Number of Cells Not on Row            : 0
+Number of Cell Overlaps               : 0
+Number of Cells overlapping blockages : 0
+Number of Orientation Violations      : 0
+Number of Site Violations             : 0
+Number of Power Strap Violations      : 0
+******************************************** 
+Information: Updating database...
+1
+if {[info exists env(QR_MAXFO)]} { catch { psynopt -only_design_rule } }
+set unq_input_list [all_inputs]
+{start_size[5] start_size[4] start_size[3] start_size[2] start_size[1] start_size[0] start_size[7] start_size[6] EN_mem_req EN_getByte EN_start RST_N CLK mem_resp_b}
+foreach_in_collection unq_clock_element [all_clocks] {
+  set unq_clock_name [get_port $unq_clock_element]
+  set unq_input_list [remove_from_collection $unq_input_list $unq_clock_name]
+}
+Warning: No objects from '_sel13' were of the correct class. (SEL-010)
+group_path -name f2f -from [all_registers]  -to [all_registers] -critical_range 0.7
+1
+group_path -name i2f -from $unq_input_list -to [all_registers] -critical_range 0.7
+1
+group_path -name f2o -from [all_registers]  -to [all_outputs]   -critical_range 0.7
+1
+group_path -name i2o -from $unq_input_list -to [all_outputs]   -critical_range 0.7
+1
+report_timing -delay_type max -transition > ../reports/PlaceOpt_Timing
+report_qor > ../reports/PlaceOpt_QOR
+report_placement_utilization > ../reports/PlaceOpt_Util
+save_mw_cel -as ${DESIGN}_PlaceOpt
+Information: Performing CEL netlist consistency check. (MWDC-118)
+Information: CEL consistency check PASSED. (MWDC-119)
+Information: Saved design named mkQRDecoder_PlaceOpt. (UIG-5)
+1
+stage "placement done"
+B: STAGE placement done 04 Nov 20:33
+# B: v7: TA notice 3 Nov 23:33: grading uses PlaceOpt QoR; CTS and routing not required.
+# QR_STOP=place stops here (PlaceOpt_* reports and the PlaceOpt cell are already saved).
+if {[info exists env(QR_STOP)] && $env(QR_STOP) eq "place"} {
+  report_power > ../reports/PlaceOpt_Power
+  report_area  > ../reports/PlaceOpt_Area
+  report_timing -delay_type min > ../reports/PlaceOpt_Hold
+  close_mw_lib
+  stage "STOPPED after PlaceOpt"
+  exit
+}
+Removing physical design 'mkQRDecoder'
+B: STAGE STOPPED after PlaceOpt 04 Nov 20:34
+
+Memory usage for this session 2684 Mbytes.
+Memory usage for this session including child processes 2684 Mbytes.
+CPU usage for this session 1974 seconds ( 0.55 hours ).
+Elapsed time for this session 2259 seconds ( 0.63 hours ).
+
+Thank you...
+Exit IC Compiler!

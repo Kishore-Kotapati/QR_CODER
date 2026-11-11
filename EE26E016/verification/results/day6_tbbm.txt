@@ -1,0 +1,15 @@
+checking package dependencies
+compiling ../verification/tb/TbBM.bsv
+code generation for mkTbBM starts
+Elaborated module file created: build/mkTbBM.ba
+All packages are up to date.
+Bluesim object reused: build/mkSyndromeUnit.{h,o}
+Bluesim object created: build/mkTbBM.{h,o}
+Bluesim object created: build/mkBMUnit.{h,o}
+Bluesim object created: build/model_mkTbBM.{h,o}
+Simulation shared library created: build/tbBM.so
+Simulation executable created: build/tbBM
+BM: 4594 blocks: 3812 fixable (0..t errors), 782 with more than t errors (BM said fail on 16)
+BM cycles: 119536 in total, at most 31 for one block
+records with a mismatch: 0
+RESULT: PASS

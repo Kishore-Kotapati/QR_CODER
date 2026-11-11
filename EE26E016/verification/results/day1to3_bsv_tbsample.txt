@@ -1,0 +1,21 @@
+checking package dependencies
+compiling ./QRTypes.bsv
+compiling ./QRTables.bsv
+compiling ./QRDecoder.bsv
+code generation for mkQRDecoder starts
+Warning: "QRDecoder.bsv", line 7, column 8: (G0022)
+  According to the generated schedule, method `getByte' is never ready.
+Warning: "QRDecoder.bsv", line 7, column 8: (G0022)
+  According to the generated schedule, method `mem_req' is never ready.
+Elaborated module file created: build/mkQRDecoder.ba
+compiling TbSample.bsv
+code generation for mkTbSample starts
+Elaborated module file created: build/mkTbSample.ba
+All packages are up to date.
+Bluesim object created: build/mkTbSample.{h,o}
+Bluesim object created: build/mkQRDecoder.{h,o}
+Bluesim object created: build/model_mkTbSample.{h,o}
+Simulation shared library created: build/tbSample.so
+Simulation executable created: build/tbSample
+start: 21x21 symbol
+decoder raised failed after 1 cycles

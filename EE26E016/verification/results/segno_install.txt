@@ -1,0 +1,4 @@
+Processing /scratch/CS6230_EE26E016/qr_bundle/wheels/segno-1.6.6-py3-none-any.whl
+Collecting importlib-metadata>=3.6.0; python_version < "3.10" (from segno==1.6.6)
+  Could not find a version that satisfies the requirement importlib-metadata>=3.6.0; python_version < "3.10" (from segno==1.6.6) (from versions: )
+No matching distribution found for importlib-metadata>=3.6.0; python_version < "3.10" (from segno==1.6.6)

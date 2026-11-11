@@ -1,0 +1,15 @@
+checking package dependencies
+compiling ../verification/tb/TbLogged.bsv
+code generation for mkTbLogged starts
+Elaborated module file created: build/mkTbLogged.ba
+All packages are up to date.
+Bluesim object reused: build/mkQRDecoder.{h,o}
+Bluesim object created: build/mkTbLogged.{h,o}
+Bluesim object created: build/model_mkTbLogged.{h,o}
+Simulation shared library created: build/tbLogged.so
+Simulation executable created: build/tbLogged
+@0 status 0 0
+start: 21x21 symbol
+@0 start 21
+@1 status 1 0
+decoder raised failed after 1 cycles

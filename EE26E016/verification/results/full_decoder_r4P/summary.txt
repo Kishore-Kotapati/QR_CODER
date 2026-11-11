@@ -1,0 +1,10 @@
+Full decoder (A's top + B's mkQRBlocks) [bsc -D QR_R4_BM -D QR_STORE_PIPE] on varaha-eda.cs.iitm.ac.in at Tue Nov  3 13:45:08 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+backend line in the temp QRDecoder.bsv: 29:   QRBackend backend <- mkQRBlocks;
+--------------------------------------------------------------
+TbLogged    want ok   -> output 'HELLO CAD FOR VLSI'  protocol OK  decode @0: latency 529 cycles (start to last byte taken), 238 memory reads
+TbDamaged3  want ok   -> output 'HELLO CAD FOR VLSI'  protocol OK  decode @0: latency 577 cycles (start to last byte taken), 238 memory reads
+TbDamaged6  want fail -> output ''  protocol OK  
+TbVersion40 want ok   -> SUCCESS: Version 40 decoded in 36512 cycles
+Verilog mkQRDecoder (with QRBlocks): made, C5 ports OK
+--------------------------------------------------------------
+Logs in /scratch/CS6230_EE26E016/qr/work/verification/results/full_decoder_r4P

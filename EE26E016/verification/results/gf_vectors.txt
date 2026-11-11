@@ -1,0 +1,2 @@
+gfMul vs model: 65536 pairs, 0 mismatches
+RESULT: PASS

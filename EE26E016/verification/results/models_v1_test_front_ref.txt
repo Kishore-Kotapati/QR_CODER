@@ -1,0 +1,18 @@
+PASS test_alignment_examples_from_spec
+PASS test_alignment_list_matches_supplied_table
+PASS test_bch_matches_supplied_table
+PASS test_bch_min_distance_is_7
+PASS test_damaged_finder_does_not_change_raw_bytes
+PASS test_data_module_count_all_versions
+PASS test_exhaustive_single_copy_count
+PASS test_fixed_function_modules
+PASS test_format_positions_shape_and_disjoint
+PASS test_masks_table2_spot_values
+PASS test_nearest_recovers_up_to_3_errors
+PASS test_sample_first_codewords
+PASS test_sample_format_is_M_mask2
+PASS test_two_copy_rules
+PASS test_version_all_sizes
+PASS test_zigzag_properties
+
+16/16 checks passed

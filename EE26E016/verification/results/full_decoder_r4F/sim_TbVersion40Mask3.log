@@ -1,0 +1,21 @@
+start: 177x177 symbol (Version 40, Mask 3)
+output byte: 'H' (0x48)
+output byte: 'E' (0x45)
+output byte: 'L' (0x4c)
+output byte: 'L' (0x4c)
+output byte: 'O' (0x4f)
+output byte: ' ' (0x20)
+output byte: 'C' (0x43)
+output byte: 'A' (0x41)
+output byte: 'D' (0x44)
+output byte: ' ' (0x20)
+output byte: 'F' (0x46)
+output byte: 'O' (0x4f)
+output byte: 'R' (0x52)
+output byte: ' ' (0x20)
+output byte: 'V' (0x56)
+output byte: 'L' (0x4c)
+output byte: 'S' (0x53)
+output byte: 'I' (0x49) <- last
+cycles: 38074
+PASS: Version 40 Mask 3 successfully decoded!

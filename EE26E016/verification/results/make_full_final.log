@@ -1,0 +1,30 @@
+bash run_tests.sh full
+== 1. Python reference models and their self-tests
+test_against_segno.py                        PASS
+test_backend.py                              PASS
+test_decode_ref.py                           PASS
+test_front_ref.py                            PASS
+test_gf_ref.py                               PASS
+test_model_interface.py                      PASS
+test_payload_ref.py                          PASS
+test_protocol_spec.py                        PASS
+== 2. Bluespec test benches (GF, RS, syndrome, Berlekamp-Massey, de-interleave, corner cases, payload modes, version 40)
+TbGF                                         PASS (2 lines)
+TbGFVectors                                  PASS (2 lines)
+TbRS                                         PASS (5 lines)
+TbSyndrome                                   PASS (3 lines)
+TbBM                                         PASS (4 lines)
+TbBlocks                                     PASS (5 lines)
+TbCornerCases                                PASS (41 lines)
+TbPayloadModes                               PASS (25 lines)
+TbVersion40Mask3                             PASS (21 lines)
+== 3. Full-decoder hardware sweep: cases
+sweep cases                                  PASS
+== 3. Full-decoder hardware sweep: cases_model
+sweep cases_model                            PASS
+
+ALL VERIFICATION STEPS PASSED
+
+real	10m6.947s
+user	23m47.862s
+sys	2m53.133s

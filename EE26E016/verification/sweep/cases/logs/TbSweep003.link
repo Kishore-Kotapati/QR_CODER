@@ -1,0 +1,9 @@
+Bluesim object created: build/mkTbSweep003.{h,o}
+Bluesim object created: build/mkQRDecoder.{h,o}
+Bluesim object created: build/mkQRBlocks.{h,o}
+Bluesim object created: build/mkSyndromeUnit.{h,o}
+Bluesim object created: build/mkBMUnit4.{h,o}
+Bluesim object created: build/mkChienForney.{h,o}
+Bluesim object created: build/model_mkTbSweep003.{h,o}
+Simulation shared library created: build/TbSweep003.so
+Simulation executable created: build/TbSweep003

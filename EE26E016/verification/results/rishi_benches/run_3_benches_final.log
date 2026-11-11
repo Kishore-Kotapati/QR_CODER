@@ -1,0 +1,1197 @@
+=== Compiling and running TbCornerCases against /scratch/CS6230_EE26E016/EE26E016/bsv ===
+Warning: Command line: (S0073)
+  Duplicate directories were found in the path specified with the -p flag.
+  Only the first occurrence will be used. The duplicates are:
+    /scratch/CS6230_EE26E016/bench_tmp
+  Note that when the -bdir flag is used, that directory is automatically added
+  to the head of the path.
+checking package dependencies
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRTypes.bsv
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRTables.bsv
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRInternalTypes.bsv
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRPayload.bsv
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRFrontEnd.bsv
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRGF.bsv
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRRS.bsv
+code generation for mkBMUnit4 starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkBMUnit4.ba
+code generation for mkSyndromeUnit starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkSyndromeUnit.ba
+code generation for mkChienForney starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkChienForney.ba
+code generation for mkBMUnit starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkBMUnit.ba
+code generation for mkBMUnit2 starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkBMUnit2.ba
+code generation for mkBMUnit3 starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkBMUnit3.ba
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRBlocks.bsv
+code generation for mkQRBlocks starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkQRBlocks.ba
+compiling /scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv
+code generation for mkQRDecoder starts
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0036)
+  Rule "payload_doReset" will appear to fire before "payload_doStart" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      payload_state.write vs. payload_state.write
+      payload_bytesPulled.write vs. payload_bytesPulled.write
+      payload_totalBitsLeft.write vs. payload_totalBitsLeft.write
+      payload_allBytesPulled.write vs. payload_allBytesPulled.write
+      payload_bitBuf.write vs. payload_bitBuf.write
+      payload_bitCount.write vs. payload_bitCount.write
+      payload_numSubIdx.write vs. payload_numSubIdx.write
+      payload_alnumSubIdx.write vs. payload_alnumSubIdx.write
+      payload_charQ.clear vs. payload_charQ.clear
+      payload_pendingChar.write vs. payload_pendingChar.write
+      payload_outQ.clear vs. payload_outQ.clear
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_doReset' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_allBytesPulled.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseAlnumGroup' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write,
+    payload_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write,
+    payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of
+  `payload_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseCount' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseMode' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currMode.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_pullByteFromBackend'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_bytesPulled.write,
+    payload_allBytesPulled.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseAlnumGroup' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_drainAlnumSubChar'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of
+  `payload_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload_state.write, payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseCount' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseMode' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_pullByteFromBackend'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_bytesPulled.write,
+    payload_allBytesPulled.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `frontend_processFmt1Resp' shadows the effects of `frontend_genFmt1'
+  when they execute in the same clock cycle. Affected method calls:
+    frontend_fmtGenIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/EE26E016/bsv/QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `start' shadows the effects of `frontend_updateReqSent' when they
+  execute in the same clock cycle. Affected method calls:
+    frontend_reqSentLastCycle.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkQRDecoder.ba
+compiling /scratch/CS6230_EE26E016/bench_tmp/TbCornerCases.bsv
+code generation for mkTbCornerCases starts
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbCornerCases.bsv", line 28, column 8: (G0010)
+  Rule "getByte" was treated as more urgent than "handleFailure". Conflicts:
+    "getByte" cannot fire before "handleFailure":
+      calls to testState.write vs. testState.read
+    "handleFailure" cannot fire before "getByte":
+      calls to testState.write vs. testState.read
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkTbCornerCases.ba
+All packages are up to date.
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkTbCornerCases.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkQRDecoder.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkQRBlocks.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkSyndromeUnit.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkBMUnit4.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkChienForney.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/model_mkTbCornerCases.{h,o}
+Simulation shared library created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/sim_TbCornerCases.so
+Simulation executable created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/sim_TbCornerCases
+
+[TEST 1/10] Clean Handout Symbol Baseline (21x21)...
+  -> Test 1 PASSED! Decoded full message in 563 cycles.
+
+[TEST 2/10] Format Bit Error (1 flip in Copy 1, dist=1)...
+  -> Test 2 PASSED! Decoded full message in 572 cycles.
+
+[TEST 3/10] Format Bit Error (2 flips in Copy 1, dist=2)...
+  -> Test 3 PASSED! Decoded full message in 572 cycles.
+
+[TEST 4/10] Format Bit Error (3 flips in Copy 1, dist=3)...
+  -> Test 4 PASSED! Decoded full message in 572 cycles.
+
+[TEST 5/10] Format Tie-Breaker (1 flip in Copy 1, 1 flip in Copy 2)...
+  -> Test 5 PASSED! Decoded full message in 572 cycles.
+
+[TEST 6/10] Uncorrectable Format (>3 flips in both copies: Expect FAILED)...
+  -> Test 6 PASSED! Expected failure correctly asserted for uncorrectable format (57 cycles).
+
+[TEST 7/10] Invalid Grid Dimension (N=22 != 17+4v: Expect FAILED)...
+  -> Test 7 PASSED! Expected failure correctly asserted for invalid dimension N=22 (3 cycles).
+
+[TEST 8/10] Consecutive Start Recovery (Re-start after failed without HW reset)...
+  -> Test 8 PASSED! Decoded full message in 563 cycles.
+
+[TEST 9/10] Consumer Backpressure (Stalling getByte reads)...
+   [Test 9 Backpressure] Read byte 0 ('H') at cycle 550
+   [Test 9 Backpressure] Read byte 1 ('E') at cycle 558
+   [Test 9 Backpressure] Read byte 2 ('L') at cycle 566
+   [Test 9 Backpressure] Read byte 3 ('L') at cycle 574
+   [Test 9 Backpressure] Read byte 4 ('O') at cycle 582
+   [Test 9 Backpressure] Read byte 5 (' ') at cycle 590
+   [Test 9 Backpressure] Read byte 6 ('C') at cycle 598
+   [Test 9 Backpressure] Read byte 7 ('A') at cycle 606
+   [Test 9 Backpressure] Read byte 8 ('D') at cycle 614
+   [Test 9 Backpressure] Read byte 9 (' ') at cycle 622
+   [Test 9 Backpressure] Read byte 10 ('F') at cycle 630
+   [Test 9 Backpressure] Read byte 11 ('O') at cycle 638
+   [Test 9 Backpressure] Read byte 12 ('R') at cycle 646
+   [Test 9 Backpressure] Read byte 13 (' ') at cycle 654
+   [Test 9 Backpressure] Read byte 14 ('V') at cycle 662
+   [Test 9 Backpressure] Read byte 15 ('L') at cycle 670
+   [Test 9 Backpressure] Read byte 16 ('S') at cycle 678
+   [Test 9 Backpressure] Read byte 17 ('I') at cycle 686
+  -> Test 9 PASSED! Decoded full message in 686 cycles.
+
+[TEST 10/10] Reed-Solomon Hardware Correction (2 corrupted data bytes in memory)...
+  -> Test 10 PASSED! Decoded full message in 637 cycles.
+
+==============================================================
+  VERIFICATION COMPLETE: ALL 10 CORNER-CASE TESTS PASSED!
+==============================================================
+
+=== Compiling and running TbPayloadModes against /scratch/CS6230_EE26E016/EE26E016/bsv ===
+Warning: Command line: (S0073)
+  Duplicate directories were found in the path specified with the -p flag.
+  Only the first occurrence will be used. The duplicates are:
+    /scratch/CS6230_EE26E016/bench_tmp
+  Note that when the -bdir flag is used, that directory is automatically added
+  to the head of the path.
+checking package dependencies
+compiling /scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv
+code generation for mkTbPayloadModes starts
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0036)
+  Rule "payload5_doReset" will appear to fire before "payload5_doStart" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      payload5_state.write vs. payload5_state.write
+      payload5_bytesPulled.write vs. payload5_bytesPulled.write
+      payload5_totalBitsLeft.write vs. payload5_totalBitsLeft.write
+      payload5_allBytesPulled.write vs. payload5_allBytesPulled.write
+      payload5_bitBuf.write vs. payload5_bitBuf.write
+      payload5_bitCount.write vs. payload5_bitCount.write
+      payload5_numSubIdx.write vs. payload5_numSubIdx.write
+      payload5_alnumSubIdx.write vs. payload5_alnumSubIdx.write
+      payload5_charQ.clear vs. payload5_charQ.clear
+      payload5_pendingChar.write vs. payload5_pendingChar.write
+      payload5_outQ.clear vs. payload5_outQ.clear
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0036)
+  Rule "payload4_doReset" will appear to fire before "payload4_doStart" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      payload4_state.write vs. payload4_state.write
+      payload4_bytesPulled.write vs. payload4_bytesPulled.write
+      payload4_totalBitsLeft.write vs. payload4_totalBitsLeft.write
+      payload4_allBytesPulled.write vs. payload4_allBytesPulled.write
+      payload4_bitBuf.write vs. payload4_bitBuf.write
+      payload4_bitCount.write vs. payload4_bitCount.write
+      payload4_numSubIdx.write vs. payload4_numSubIdx.write
+      payload4_alnumSubIdx.write vs. payload4_alnumSubIdx.write
+      payload4_charQ.clear vs. payload4_charQ.clear
+      payload4_pendingChar.write vs. payload4_pendingChar.write
+      payload4_outQ.clear vs. payload4_outQ.clear
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0036)
+  Rule "payload3_doReset" will appear to fire before "payload3_doStart" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      payload3_state.write vs. payload3_state.write
+      payload3_bytesPulled.write vs. payload3_bytesPulled.write
+      payload3_totalBitsLeft.write vs. payload3_totalBitsLeft.write
+      payload3_allBytesPulled.write vs. payload3_allBytesPulled.write
+      payload3_bitBuf.write vs. payload3_bitBuf.write
+      payload3_bitCount.write vs. payload3_bitCount.write
+      payload3_numSubIdx.write vs. payload3_numSubIdx.write
+      payload3_alnumSubIdx.write vs. payload3_alnumSubIdx.write
+      payload3_charQ.clear vs. payload3_charQ.clear
+      payload3_pendingChar.write vs. payload3_pendingChar.write
+      payload3_outQ.clear vs. payload3_outQ.clear
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0036)
+  Rule "payload2_doReset" will appear to fire before "payload2_doStart" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      payload2_state.write vs. payload2_state.write
+      payload2_bytesPulled.write vs. payload2_bytesPulled.write
+      payload2_totalBitsLeft.write vs. payload2_totalBitsLeft.write
+      payload2_allBytesPulled.write vs. payload2_allBytesPulled.write
+      payload2_bitBuf.write vs. payload2_bitBuf.write
+      payload2_bitCount.write vs. payload2_bitCount.write
+      payload2_numSubIdx.write vs. payload2_numSubIdx.write
+      payload2_alnumSubIdx.write vs. payload2_alnumSubIdx.write
+      payload2_charQ.clear vs. payload2_charQ.clear
+      payload2_pendingChar.write vs. payload2_pendingChar.write
+      payload2_outQ.clear vs. payload2_outQ.clear
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0036)
+  Rule "payload1_doReset" will appear to fire before "payload1_doStart" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      payload1_state.write vs. payload1_state.write
+      payload1_bytesPulled.write vs. payload1_bytesPulled.write
+      payload1_totalBitsLeft.write vs. payload1_totalBitsLeft.write
+      payload1_allBytesPulled.write vs. payload1_allBytesPulled.write
+      payload1_bitBuf.write vs. payload1_bitBuf.write
+      payload1_bitCount.write vs. payload1_bitCount.write
+      payload1_numSubIdx.write vs. payload1_numSubIdx.write
+      payload1_alnumSubIdx.write vs. payload1_alnumSubIdx.write
+      payload1_charQ.clear vs. payload1_charQ.clear
+      payload1_pendingChar.write vs. payload1_pendingChar.write
+      payload1_outQ.clear vs. payload1_outQ.clear
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_doReset' when they
+  execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_allBytesPulled.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write,
+    payload5_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write,
+    payload5_currCharCount.write,
+    payload5_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write,
+    payload5_currCharCount.write,
+    payload5_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of
+  `payload5_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload5_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write,
+    payload5_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write,
+    payload5_currMode.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of `payload5_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doStart' shadows the effects of
+  `payload5_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload5_bytesPulled.write,
+    payload5_allBytesPulled.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write,
+    payload5_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_drainAlnumSubChar'
+  when they execute in the same clock cycle. Affected method calls:
+    payload5_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write,
+    payload5_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of
+  `payload5_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload5_state.write, payload5_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write,
+    payload5_totalBitsLeft.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of `payload5_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload5_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload5_doReset' shadows the effects of
+  `payload5_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload5_bytesPulled.write,
+    payload5_allBytesPulled.write,
+    payload5_bitBuf.write,
+    payload5_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_doReset' when they
+  execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_allBytesPulled.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write,
+    payload4_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write,
+    payload4_currCharCount.write,
+    payload4_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write,
+    payload4_currCharCount.write,
+    payload4_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of
+  `payload4_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload4_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write,
+    payload4_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write,
+    payload4_currMode.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of `payload4_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doStart' shadows the effects of
+  `payload4_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload4_bytesPulled.write,
+    payload4_allBytesPulled.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write,
+    payload4_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_drainAlnumSubChar'
+  when they execute in the same clock cycle. Affected method calls:
+    payload4_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write,
+    payload4_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of
+  `payload4_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload4_state.write, payload4_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write,
+    payload4_totalBitsLeft.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of `payload4_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload4_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload4_doReset' shadows the effects of
+  `payload4_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload4_bytesPulled.write,
+    payload4_allBytesPulled.write,
+    payload4_bitBuf.write,
+    payload4_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_doReset' when they
+  execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_allBytesPulled.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write,
+    payload3_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write,
+    payload3_currCharCount.write,
+    payload3_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write,
+    payload3_currCharCount.write,
+    payload3_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of
+  `payload3_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload3_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write,
+    payload3_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write,
+    payload3_currMode.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of `payload3_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doStart' shadows the effects of
+  `payload3_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload3_bytesPulled.write,
+    payload3_allBytesPulled.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write,
+    payload3_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_drainAlnumSubChar'
+  when they execute in the same clock cycle. Affected method calls:
+    payload3_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write,
+    payload3_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of
+  `payload3_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload3_state.write, payload3_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write,
+    payload3_totalBitsLeft.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of `payload3_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload3_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload3_doReset' shadows the effects of
+  `payload3_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload3_bytesPulled.write,
+    payload3_allBytesPulled.write,
+    payload3_bitBuf.write,
+    payload3_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_doReset' when they
+  execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_allBytesPulled.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write,
+    payload2_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write,
+    payload2_currCharCount.write,
+    payload2_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write,
+    payload2_currCharCount.write,
+    payload2_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of
+  `payload2_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload2_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write,
+    payload2_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write,
+    payload2_currMode.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of `payload2_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doStart' shadows the effects of
+  `payload2_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload2_bytesPulled.write,
+    payload2_allBytesPulled.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write,
+    payload2_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_drainAlnumSubChar'
+  when they execute in the same clock cycle. Affected method calls:
+    payload2_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write,
+    payload2_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of
+  `payload2_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload2_state.write, payload2_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write,
+    payload2_totalBitsLeft.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of `payload2_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload2_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload2_doReset' shadows the effects of
+  `payload2_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload2_bytesPulled.write,
+    payload2_allBytesPulled.write,
+    payload2_bitBuf.write,
+    payload2_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_doReset' when they
+  execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_allBytesPulled.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write,
+    payload1_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write,
+    payload1_currCharCount.write,
+    payload1_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write,
+    payload1_currCharCount.write,
+    payload1_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of
+  `payload1_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload1_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write,
+    payload1_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write,
+    payload1_currMode.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of `payload1_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doStart' shadows the effects of
+  `payload1_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload1_bytesPulled.write,
+    payload1_allBytesPulled.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_parseAlnumGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write,
+    payload1_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_drainAlnumSubChar'
+  when they execute in the same clock cycle. Affected method calls:
+    payload1_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write,
+    payload1_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of
+  `payload1_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload1_state.write, payload1_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_parseCount' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write,
+    payload1_totalBitsLeft.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of `payload1_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload1_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "/scratch/CS6230_EE26E016/bench_tmp/TbPayloadModes.bsv", line 36, column 8: (G0117)
+  Rule `payload1_doReset' shadows the effects of
+  `payload1_pullByteFromBackend' when they execute in the same clock cycle.
+  Affected method calls:
+    payload1_bytesPulled.write,
+    payload1_allBytesPulled.write,
+    payload1_bitBuf.write,
+    payload1_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkTbPayloadModes.ba
+All packages are up to date.
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkTbPayloadModes.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/model_mkTbPayloadModes.{h,o}
+Simulation shared library created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/sim_TbPayloadModes.so
+Simulation executable created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/sim_TbPayloadModes
+[TEST 1/5] Empty Message Decode: PASSED! (done asserted with 0 bytes)
+  [Byte Mode] received: 'T' (0x54) last=0
+  [Byte Mode] received: 'e' (0x65) last=0
+  [Byte Mode] received: 's' (0x73) last=0
+  [Byte Mode] received: 't' (0x74) last=1
+[TEST 2/5] 8-Bit Byte Mode ('Test'): PASSED!
+
+  [Numeric 3-digit + 1-digit] received: '8' (0x38) last=0
+  [Numeric 3-digit + 1-digit] received: '6' (0x36) last=0
+  [Numeric 3-digit + 1-digit] received: '7' (0x37) last=0
+  [Numeric 3-digit + 1-digit] received: '5' (0x35) last=0
+  [Numeric 3-digit + 1-digit] received: '3' (0x33) last=0
+  [Numeric 3-digit + 1-digit] received: '0' (0x30) last=0
+  [Numeric 3-digit + 1-digit] received: '9' (0x39) last=1
+[TEST 3/5] Numeric Mode ('8675309' 3+3+1 digits): PASSED!
+
+  [Numeric 2-digit group] received: '1' (0x31) last=0
+  [Numeric 2-digit group] received: '2' (0x32) last=1
+[TEST 4/5] Numeric Mode ('12' 2 digits): PASSED!
+
+  [Multi-Segment Alnum+Numeric] received: 'A' (0x41) last=0
+  [Multi-Segment Alnum+Numeric] received: 'B' (0x42) last=0
+  [Multi-Segment Alnum+Numeric] received: '1' (0x31) last=0
+  [Multi-Segment Alnum+Numeric] received: '2' (0x32) last=1
+[TEST 5/5] Multi-Segment ('AB' + '12'): PASSED!
+
+==============================================================
+  ALL PAYLOAD MODES VERIFIED AND PASSED IN BSV RTL!
+==============================================================
+
+=== Compiling and running TbVersion40Mask3 against /scratch/CS6230_EE26E016/EE26E016/bsv ===
+Warning: Command line: (S0073)
+  Duplicate directories were found in the path specified with the -p flag.
+  Only the first occurrence will be used. The duplicates are:
+    /scratch/CS6230_EE26E016/bench_tmp
+  Note that when the -bdir flag is used, that directory is automatically added
+  to the head of the path.
+checking package dependencies
+compiling /scratch/CS6230_EE26E016/bench_tmp/TbVersion40Mask3.bsv
+code generation for mkTbVersion40Mask3 starts
+Elaborated module file created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkTbVersion40Mask3.ba
+All packages are up to date.
+Bluesim object reused: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkQRDecoder.{h,o}
+Bluesim object reused: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkQRBlocks.{h,o}
+Bluesim object reused: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkSyndromeUnit.{h,o}
+Bluesim object reused: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkBMUnit4.{h,o}
+Bluesim object reused: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkChienForney.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/mkTbVersion40Mask3.{h,o}
+Bluesim object created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/model_mkTbVersion40Mask3.{h,o}
+Simulation shared library created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/sim_TbVersion40Mask3.so
+Simulation executable created: /scratch/CS6230_EE26E016/bench_tmp/build_tb/sim_TbVersion40Mask3
+start: 177x177 symbol (Version 40, Mask 3)
+output byte: 'H' (0x48)
+output byte: 'E' (0x45)
+output byte: 'L' (0x4c)
+output byte: 'L' (0x4c)
+output byte: 'O' (0x4f)
+output byte: ' ' (0x20)
+output byte: 'C' (0x43)
+output byte: 'A' (0x41)
+output byte: 'D' (0x44)
+output byte: ' ' (0x20)
+output byte: 'F' (0x46)
+output byte: 'O' (0x4f)
+output byte: 'R' (0x52)
+output byte: ' ' (0x20)
+output byte: 'V' (0x56)
+output byte: 'L' (0x4c)
+output byte: 'S' (0x53)
+output byte: 'I' (0x49) <- last
+cycles: 38074
+PASS: Version 40 Mask 3 successfully decoded!

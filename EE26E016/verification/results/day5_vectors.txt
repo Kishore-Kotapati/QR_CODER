@@ -1,0 +1,1 @@
+wrote /scratch/CS6230_EE26E016/qr/work/verification/vectors/backend/syn_vectors.hex: 791 clean blocks + 3034 blocks with errors, 98 shapes (ecLen, n), seed 2026

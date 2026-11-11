@@ -1,0 +1,42 @@
+checking package dependencies
+compiling ./QRInternalTypes.bsv
+compiling ./QRBackendStub.bsv
+code generation for mkQRBackendStub starts
+Warning: "QRBackendStub.bsv", line 14, column 8: (G0117)
+  Rule `reset' shadows the effects of `putRawByte' when they execute in the
+  same clock cycle. Affected method calls:
+    count.write, state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRBackendStub.bsv", line 14, column 8: (G0117)
+  Rule `reset' shadows the effects of `configure' when they execute in the
+  same clock cycle. Affected method calls:
+    state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Elaborated module file created: build/mkQRBackendStub.ba
+compiling TbBackendStub.bsv
+code generation for mkTbBackendStub starts
+Elaborated module file created: build/mkTbBackendStub.ba
+All packages are up to date.
+Bluesim object created: build/mkTbBackendStub.{h,o}
+Bluesim object created: build/mkQRBackendStub.{h,o}
+Bluesim object created: build/model_mkTbBackendStub.{h,o}
+Simulation shared library created: build/tbBackendStub.so
+Simulation executable created: build/tbBackendStub
+16 data bytes received, 0 problems, reset+reconfigure OK
+RESULT: PASS
+checking package dependencies
+compiling QRBackendStub.bsv
+code generation for mkQRBackendStub starts
+Warning: "QRBackendStub.bsv", line 14, column 8: (G0117)
+  Rule `reset' shadows the effects of `putRawByte' when they execute in the
+  same clock cycle. Affected method calls:
+    state.write, count.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRBackendStub.bsv", line 14, column 8: (G0117)
+  Rule `reset' shadows the effects of `configure' when they execute in the
+  same clock cycle. Affected method calls:
+    state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Verilog file created: build/mkQRBackendStub.v
+All packages are up to date.
+Verilog made: build/mkQRBackendStub.v

@@ -1,0 +1,14 @@
+checking package dependencies
+All packages are up to date.
+Bluesim object reused: build_r4/mkTbRS.{h,o}
+Bluesim object reused: build_r4/mkSyndromeUnit.{h,o}
+Bluesim object reused: build_r4/mkBMUnit3.{h,o}
+Bluesim object reused: build_r4/mkChienForney.{h,o}
+Bluesim object created: build_r4/model_mkTbRS.{h,o}
+Simulation shared library created: build_r4/TbRS.so
+Simulation executable created: build_r4/TbRS
+RS: 4594 blocks: 3812 fixable -> 3812 fixed exactly (22246 bytes corrected)
+RS: 782 blocks with more than t errors -> 782 failed, 0 decoded to another valid codeword (allowed)
+decode cycles (BM + Chien/Forney): 564857 in total, at most 231 for one block
+records with a mismatch: 0
+RESULT: PASS

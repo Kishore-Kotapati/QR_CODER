@@ -1,0 +1,88 @@
+package TbSweep048;
+import Vector::*;
+import QRTypes::*;
+import QRDecoder::*;
+typedef 41 N;
+(* synthesize *)
+module mkTbSweep048(Empty);
+   Vector#(N, Bit#(N)) symbol = replicate(0);
+   symbol[  0] = 'b11111110010010111001110001110001101111111;
+   symbol[  1] = 'b10000010010001110100111101110101001000001;
+   symbol[  2] = 'b10111010111110111110001111100111001011101;
+   symbol[  3] = 'b10111010111000111010111110110000101011101;
+   symbol[  4] = 'b10111010011010110010110010010010001011101;
+   symbol[  5] = 'b10000010000110110001000010000001001000001;
+   symbol[  6] = 'b11111110101010101010101010101010101111111;
+   symbol[  7] = 'b00000000000110100000001100100110000000000;
+   symbol[  8] = 'b00011011010000000110010010011000000001100;
+   symbol[  9] = 'b01101001101111110111010111000010111011101;
+   symbol[ 10] = 'b01000111011011010111110010100110101011001;
+   symbol[ 11] = 'b11100100011111011011110010010100000110100;
+   symbol[ 12] = 'b01011011000100101100110110101111000110100;
+   symbol[ 13] = 'b01001101011101011011000111001101100101110;
+   symbol[ 14] = 'b10001010011011101011000010001101101000011;
+   symbol[ 15] = 'b01011100111111000111010010110110100100111;
+   symbol[ 16] = 'b10010010011111000111000011001100110011110;
+   symbol[ 17] = 'b01111000100011010000011001101110101111101;
+   symbol[ 18] = 'b11101010010100001111111101110110111011000;
+   symbol[ 19] = 'b11011000110000111110011111100000010000001;
+   symbol[ 20] = 'b11111110000100001001010110011010111111000;
+   symbol[ 21] = 'b01110101010100010010001111000000111010100;
+   symbol[ 22] = 'b00100010101110000010110111000110001011100;
+   symbol[ 23] = 'b00001000100011000001101111010100000110001;
+   symbol[ 24] = 'b11101110101110101000011010100111100110101;
+   symbol[ 25] = 'b01010001001011010110001000100101000101010;
+   symbol[ 26] = 'b11101111000110010110111000010100111000011;
+   symbol[ 27] = 'b10010001110111110100111101001110111100111;
+   symbol[ 28] = 'b10110010110101001000110101111101110010110;
+   symbol[ 29] = 'b11010001110111010101100001001110111111101;
+   symbol[ 30] = 'b11101111100110100001110010110110101011000;
+   symbol[ 31] = 'b11101001001010101111110011000000010010001;
+   symbol[ 32] = 'b11000010110001101100100101111010111111000;
+   symbol[ 33] = 'b00000000101000010111001011100101100010111;
+   symbol[ 34] = 'b11111110101101100010110111100000101011110;
+   symbol[ 35] = 'b10000010010011001001011111110010100010011;
+   symbol[ 36] = 'b10111010111000000001111100100101111110111;
+   symbol[ 37] = 'b10111010111010111000001101100110100100000;
+   symbol[ 38] = 'b10111010011010100011010111110101001101111;
+   symbol[ 39] = 'b10000010011010000110110010001110110011011;
+   symbol[ 40] = 'b11111110010100100111010001110101011100110;
+   Integer n = 41;
+   QRDecoder dut <- mkQRDecoder;
+   Reg#(Bool)      started <- mkReg(False);
+   Reg#(UInt#(32)) cycle   <- mkReg(0);
+   Reg#(UInt#(32)) startAt <- mkReg(0);
+   Reg#(Bit#(1))   answer  <- mkReg(0);
+   rule tick; cycle <= cycle + 1; endrule
+   rule go (!started);
+      dut.start(fromInteger(n)); started <= True; startAt <= cycle;
+   endrule
+   rule serve_req;
+      match {.r, .c} <- dut.mem.req;
+      Bit#(1) b = 0;
+      if (r < fromInteger(n) && c < fromInteger(n)) begin
+         Bit#(N) row = symbol[r];
+         b = row[fromInteger(n - 1) - c];
+      end
+      answer <= b;
+   endrule
+   (* fire_when_enabled, no_implicit_conditions *)
+   rule serve_resp; dut.mem.resp(answer); endrule
+   rule get (started);
+      let b <- dut.getByte;
+      $display("BYTE %02h", b.data);
+      if (b.last) begin
+         $display("RESULT DONE cycles=%0d", cycle - startAt);
+         $finish(0);
+      end
+   endrule
+   rule fail (started && dut.failed);
+      $display("RESULT FAILED cycles=%0d", cycle - startAt);
+      $finish(0);
+   endrule
+   rule timeout (started && cycle - startAt > 200000);
+      $display("RESULT TIMEOUT");
+      $finish(1);
+   endrule
+endmodule
+endpackage

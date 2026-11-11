@@ -1,0 +1,5 @@
+checking package dependencies
+compiling TbSweep018.bsv
+code generation for mkTbSweep018 starts
+Elaborated module file created: build/mkTbSweep018.ba
+All packages are up to date.

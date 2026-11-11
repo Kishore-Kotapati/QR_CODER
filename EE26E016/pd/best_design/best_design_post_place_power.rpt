@@ -1,0 +1,57 @@
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated primary inputs. (PWR-414)
+Warning: Design has unannotated sequential cell outputs. (PWR-415)
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : mkQRDecoder
+Version: V-2023.12
+Date   : Wed Nov  4 20:33:58 2026
+****************************************
+
+
+Library(s) Used:
+
+    saed14rvt_base_ss0p72v125c (File: /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db)
+
+
+Operating Conditions: ss0p72v125c   Library: saed14rvt_base_ss0p72v125c
+Wire Load Model Mode: top
+
+
+Global Operating Voltage = 0.72 
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1pW
+
+
+Attributes
+----------
+i - Including register clock pin internal power
+
+
+  Cell Internal Power  =   6.3534 mW   (87%)
+  Net Switching Power  = 929.0380 uW   (13%)
+                         ---------
+Total Dynamic Power    =   7.2825 mW  (100%)
+
+Cell Leakage Power     = 116.6909 uW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      6.1360            0.6424        2.4798e+06            6.7809  (  91.65%)  i
+register           0.1067        6.6855e-02        8.0969e+07            0.2545  (   3.44%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational      0.1101            0.2198        3.3241e+07            0.3631  (   4.91%)
+--------------------------------------------------------------------------------------------------
+Total              6.3528 mW         0.9290 mW     1.1669e+08 pW         7.3985 mW
+1

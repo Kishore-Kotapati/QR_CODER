@@ -1,0 +1,15 @@
+checking package dependencies
+All packages are up to date.
+Bluesim object reused: build_vecA/mkTbBlocks.{h,o}
+Bluesim object reused: build_vecA/mkQRBlocks.{h,o}
+Bluesim object reused: build_vecA/mkSyndromeUnit.{h,o}
+Bluesim object reused: build_vecA/mkBMUnit.{h,o}
+Bluesim object reused: build_vecA/mkChienForney.{h,o}
+Bluesim object created: build_vecA/model_mkTbBlocks.{h,o}
+Simulation shared library created: build_vecA/TbBlocks.so
+Simulation executable created: build_vecA/TbBlocks
+QRBlocks: 727 symbols: 491 must decode -> 491 decoded exactly; 236 with a block beyond t -> 236 gave isError
+abuse: 104 resets in the middle of the input, 93 resets after half the output; 341950 data bytes read
+decode time (last raw byte -> ready/error): at most 11561 cycles (version 40)
+symbols with a mismatch: 0
+RESULT: PASS

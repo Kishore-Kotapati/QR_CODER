@@ -1,0 +1,470 @@
+ 
+****************************************
+Report : qor
+Design : mkQRDecoder
+Version: V-2023.12
+Date   : Wed Nov  4 20:33:40 2026
+****************************************
+
+
+  Timing Path Group 'f2f'
+  -----------------------------------
+  Levels of Logic:               7.00
+  Critical Path Length:          0.80
+  Critical Path Slack:           0.00
+  Critical Path Clk Period:      1.20
+  Total Negative Slack:          0.00
+  No. of Violating Paths:        0.00
+  Worst Hold Violation:          0.00
+  Total Hold Violation:          0.00
+  No. of Hold Violations:        0.00
+  -----------------------------------
+
+  Timing Path Group 'f2o'
+  -----------------------------------
+  Levels of Logic:               4.00
+  Critical Path Length:          0.62
+  Critical Path Slack:           0.10
+  Critical Path Clk Period:      1.20
+  Total Negative Slack:          0.00
+  No. of Violating Paths:        0.00
+  Worst Hold Violation:          0.00
+  Total Hold Violation:          0.00
+  No. of Hold Violations:        0.00
+  -----------------------------------
+
+  Timing Path Group 'i2f'
+  -----------------------------------
+  Levels of Logic:               7.00
+  Critical Path Length:          0.45
+  Critical Path Slack:           0.00
+  Critical Path Clk Period:      1.20
+  Total Negative Slack:          0.00
+  No. of Violating Paths:        0.00
+  Worst Hold Violation:          0.00
+  Total Hold Violation:          0.00
+  No. of Hold Violations:        0.00
+  -----------------------------------
+
+
+  Cell Count
+  -----------------------------------
+  Hierarchical Cell Count:       3862
+  Hierarchical Port Count:      21263
+  Leaf Cell Count:              85490
+  Buf/Inv Cell Count:            3166
+  Buf Cell Count:                1514
+  Inv Cell Count:                1655
+  CT Buf/Inv Cell Count:            0
+  Combinational Cell Count:     48823
+  Sequential Cell Count:        36667
+  Macro Count:                      0
+  -----------------------------------
+
+
+  Area
+  -----------------------------------
+  Combinational Area:    19286.472052
+  Noncombinational Area: 32999.500305
+  Buf/Inv Area:            707.869206
+  Total Buffer Area:           411.85
+  Total Inverter Area:         299.48
+  Macro/Black Box Area:      0.000000
+  Net Area:                  0.000000
+  Net XLength        :      432553.97
+  Net YLength        :      359225.47
+  -----------------------------------
+  Cell Area:             52285.972357
+  Design Area:           52285.972357
+  Net Length        :       791779.44
+
+
+  Design Rules
+  -----------------------------------
+  Total Number of Nets:         87325
+  Nets With Violations:           149
+  Max Trans Violations:             0
+  Max Cap Violations:               0
+  Max Fanout Violations:          149
+  -----------------------------------
+
+
+  Hostname: varaha-eda.cs.iitm.ac.in
+
+  Compile CPU Statistics
+  -----------------------------------------
+  Resource Sharing:                    0.00
+  Logic Optimization:                  0.00
+  Mapping Optimization:              617.07
+  -----------------------------------------
+  Overall Compile Time:             1046.65
+  Overall Compile Wall Clock Time: 1793803392.00
+
+  --------------------------------------------------------------------
+
+  Design  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  --------------------------------------------------------------------
+
+
+1
+ 
+****************************************
+  Report : Chip Summary
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:33:41 2026
+****************************************
+Std cell utilization: 92.29%  (1177619/(1275939-0))
+(Non-fixed + Fixed)
+Std cell utilization: 92.29%  (1177619/(1275939-0))
+(Non-fixed only)
+Chip area:            1275939  sites, bbox (0.00 0.00 243.98 243.45) um
+Std cell area:        1177619  sites, (non-fixed:1177619 fixed:0)
+                      85490    cells, (non-fixed:85490  fixed:0)
+Macro cell area:      0        sites
+                      0        cells
+Placement blockages:  0        sites, (excluding fixed std cells)
+                      0        sites, (include fixed std cells & chimney area)
+                      0        sites, (complete p/g net blockages)
+Routing blockages:    0        sites, (partial p/g net blockages)
+                      0        sites, (routing blockages and signal pre-route)
+Lib cell count:       186 
+Avg. std cell width:  0.95 um 
+Site array:           unit     (width: 0.074 um, height: 0.600 um, rows: 387)
+Physical DB scale:    1000 db_unit = 1 um 
+
+ 
+****************************************
+  Report : pnet options
+  Design : mkQRDecoder
+  Version: V-2023.12
+  Date   : Wed Nov  4 20:33:41 2026
+****************************************
+
+
+--------------------------------------------------------------------
+Layer      Blockage   Min_width   Min_height   Via_additive     Density
+--------------------------------------------------------------------
+M1         none          ---         ---       via additive      ---
+M2         none          ---         ---       via additive      ---
+M3         none          ---         ---       via additive      ---
+M4         none          ---         ---       via additive      ---
+M5         none          ---         ---       via additive      ---
+M6         none          ---         ---       via additive      ---
+M7         none          ---         ---       via additive      ---
+M8         none          ---         ---       via additive      ---
+M9         none          ---         ---       via additive      ---
+MRDL       none          ---         ---       via additive      ---
+
+**********************************
+      Sub-Region Utilization      
+**********************************
+Number of regions with placement utilization 0 - 0.125 is 0 (0.00%)
+Number of regions with placement utilization 0.125 - 0.25 is 0 (0.00%)
+Number of regions with placement utilization 0.25 - 0.375 is 0 (0.00%)
+Number of regions with placement utilization 0.375 - 0.5 is 0 (0.00%)
+Number of regions with placement utilization 0.5 - 0.625 is 8 (0.12%)
+Number of regions with placement utilization 0.625 - 0.75 is 52 (0.78%)
+Number of regions with placement utilization 0.75 - 0.875 is 1459 (21.97%)
+Number of regions with placement utilization 0.875 - 1 is 5123 (77.13%)
+1
+ 
+****************************************
+Report : area
+Design : mkQRDecoder
+Version: V-2023.12
+Date   : Wed Nov  4 20:34:00 2026
+****************************************
+
+Library(s) Used:
+
+    saed14rvt_base_ss0p72v125c (File: /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db)
+
+Number of ports:                           48
+Number of nets:                          8595
+Number of cells:                         7784
+Number of combinational cells:           7321
+Number of sequential cells:               425
+Number of macros/black boxes:               0
+Number of buf/inv:                       1001
+Number of references:                     168
+
+Combinational area:              19286.472052
+Buf/Inv area:                      707.869206
+Noncombinational area:           32999.500305
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (No wire load specified)
+
+Total cell area:                 52285.972357
+Total area:                 undefined
+1
+Information: Updating graph... (UID-83)
+Warning: Design 'mkQRDecoder' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Information: Updating design information... (UID-85)
+Warning: Design 'mkQRDecoder' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -transition_time
+Design : mkQRDecoder
+Version: V-2023.12
+Date   : Wed Nov  4 20:33:40 2026
+****************************************
+
+ * Some/all delay information is back-annotated.
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: ss0p72v125c   Library: saed14rvt_base_ss0p72v125c
+
+Information: Percent of Arnoldi-based delays =  0.00%
+
+  Startpoint: frontend_fmtRecIdx_reg_0_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: clk_gate_frontend_fmtBestD_reg/latch
+            (negative level-sensitive latch clocked by CLK)
+  Path Group: f2f
+  Path Type: max
+
+  Point                                        Trans      Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  frontend_fmtRecIdx_reg_0_/CK (SAEDRVT14_FDP_V2_0P5)
+                                                0.00      0.00       0.00 r
+  frontend_fmtRecIdx_reg_0_/Q (SAEDRVT14_FDP_V2_0P5)
+                                                0.03      0.07       0.07 f
+  U6409/X (SAEDRVT14_OR2_MM_1)                  0.02      0.04 *     0.11 f
+  U5650/X (SAEDRVT14_NR2_MM_1)                  0.34      0.27 *     0.38 r
+  U5225/X (SAEDRVT14_INV_1)                     0.06      0.09 *     0.47 f
+  U6315/X (SAEDRVT14_NR2_1P5)                   0.11      0.11 *     0.58 r
+  U10604/X (SAEDRVT14_ND2B_U_0P5)               0.03      0.05 *     0.63 r
+  U10605/X (SAEDRVT14_AO21_1)                   0.12      0.11 *     0.74 r
+  U11706/X (SAEDRVT14_ND2B_U_0P5)               0.03      0.05 *     0.80 r
+  clk_gate_frontend_fmtBestD_reg/EN (SNPS_CLOCK_GATE_HIGH_mkQRDecoder_8)
+                                                          0.00       0.80 r
+  clk_gate_frontend_fmtBestD_reg/latch/D (SAEDRVT14_LDNQ_U_0P5)
+                                                0.03      0.00 *     0.80 r
+  data arrival time                                                  0.80
+
+  clock CLK (fall edge)                                   0.60       0.60
+  clock network delay (ideal)                             0.00       0.60
+  clk_gate_frontend_fmtBestD_reg/latch/G (SAEDRVT14_LDNQ_U_0P5)
+                                                          0.00       0.60 f
+  time borrowed from endpoint                             0.20       0.80
+  data required time                                                 0.80
+  --------------------------------------------------------------------------
+  data required time                                                 0.80
+  data arrival time                                                 -0.80
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+  Time Borrowing Information
+  --------------------------------------------------------------
+  CLK nominal pulse width                                 0.60   
+  library setup time                                     -0.03   
+  --------------------------------------------------------------
+  max time borrow                                         0.57   
+  actual time borrow                                      0.20   
+  --------------------------------------------------------------
+
+
+  Startpoint: frontend_state_reg_0_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: RDY_start (output port clocked by CLK)
+  Path Group: f2o
+  Path Type: max
+
+  Point                                        Trans      Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  frontend_state_reg_0_/CK (SAEDRVT14_FDP_V2_1)
+                                                0.00      0.00       0.00 r
+  frontend_state_reg_0_/Q (SAEDRVT14_FDP_V2_1)
+                                                0.06      0.09       0.09 f
+  U10638/X (SAEDRVT14_OR2_1)                    0.01      0.04 *     0.13 f
+  U4989/X (SAEDRVT14_NR2_MM_1)                  0.04      0.03 *     0.16 r
+  U4212/X (SAEDRVT14_AOI21_0P5)                 0.10      0.08 *     0.24 f
+  U6329/X (SAEDRVT14_AOI21_0P5)                 0.45      0.37 *     0.61 r
+  RDY_start (out)                               0.45      0.01 *     0.62 r
+  data arrival time                                                  0.62
+
+  clock CLK (rise edge)                                   1.20       1.20
+  clock network delay (ideal)                             0.00       1.20
+  output external delay                                  -0.48       0.72
+  data required time                                                 0.72
+  --------------------------------------------------------------------------
+  data required time                                                 0.72
+  data arrival time                                                 -0.62
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.10
+
+
+  Startpoint: RST_N (input port clocked by CLK)
+  Endpoint: backend/clk_gate_state_reg/latch
+            (negative level-sensitive latch clocked by CLK)
+  Path Group: i2f
+  Path Type: max
+
+  Point                                        Trans      Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  input external delay                                    0.48       0.48 r
+  RST_N (in)                                    0.00      0.00       0.48 r
+  backend/IN6 (mkQRBlocks)                                0.00       0.48 r
+  backend/U46/X (SAEDRVT14_BUF_UCDC_0P5)        0.07      0.13 *     0.61 r
+  backend/U52/X (SAEDRVT14_INV_S_1)             0.07      0.09 *     0.70 f
+  backend/U969/X (SAEDRVT14_NR2_1P5)            0.08      0.10 *     0.80 r
+  backend/U408/X (SAEDRVT14_INV_0P5)            0.05      0.08 *     0.87 f
+  backend/U1280/X (SAEDRVT14_NR2_1P5)           0.02      0.02 *     0.90 r
+  backend/U1281/X (SAEDRVT14_AN2_1)             0.01      0.03 *     0.92 r
+  backend/U341/X (SAEDRVT14_ND2_1)              0.01      0.01 *     0.93 f
+  backend/clk_gate_state_reg/EN (SNPS_CLOCK_GATE_HIGH_mkQRBlocks_16)
+                                                          0.00       0.93 f
+  backend/clk_gate_state_reg/latch/D (SAEDRVT14_LDNQ_U_0P5)
+                                                0.01      0.00 *     0.93 f
+  data arrival time                                                  0.93
+
+  clock CLK (fall edge)                                   0.60       0.60
+  clock network delay (ideal)                             0.00       0.60
+  backend/clk_gate_state_reg/latch/G (SAEDRVT14_LDNQ_U_0P5)
+                                                          0.00       0.60 f
+  time borrowed from endpoint                             0.33       0.93
+  data required time                                                 0.93
+  --------------------------------------------------------------------------
+  data required time                                                 0.93
+  data arrival time                                                 -0.93
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+  Time Borrowing Information
+  --------------------------------------------------------------
+  CLK nominal pulse width                                 0.60   
+  library setup time                                     -0.01   
+  --------------------------------------------------------------
+  max time borrow                                         0.59   
+  actual time borrow                                      0.33   
+  --------------------------------------------------------------
+
+
+1
+ 
+****************************************
+Report : timing
+        -path full
+        -delay min
+        -max_paths 1
+Design : mkQRDecoder
+Version: V-2023.12
+Date   : Wed Nov  4 20:34:00 2026
+****************************************
+
+ * Some/all delay information is back-annotated.
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: ff0p88v125c   Library: saed14rvt_base_ff0p88v125c
+
+Information: Percent of Arnoldi-based delays =  0.00%
+
+  Startpoint: frontend_version_reg_4_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: frontend_currentConfig_reg_66_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: f2f
+  Path Type: min
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  frontend_version_reg_4_/CK (SAEDRVT14_FDP_V2_1)         0.00       0.00 r
+  frontend_version_reg_4_/QN (SAEDRVT14_FDP_V2_1)         0.02       0.02 r
+  U5640/X (SAEDRVT14_NR2_MM_1)                            0.00 *     0.03 f
+  frontend_currentConfig_reg_66_/D (SAEDRVT14_FDP_V2_0P5)
+                                                          0.00 *     0.03 f
+  data arrival time                                                  0.03
+
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  frontend_currentConfig_reg_66_/CK (SAEDRVT14_FDP_V2_0P5)
+                                                          0.00       0.00 r
+  library hold time                                       0.00       0.00
+  data required time                                                 0.00
+  --------------------------------------------------------------------------
+  data required time                                                 0.00
+  data arrival time                                                 -0.03
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.02
+
+
+  Startpoint: frontend_reqQ/D_OUT_reg_8_
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: mem_req[8] (output port clocked by CLK)
+  Path Group: f2o
+  Path Type: min
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  frontend_reqQ/D_OUT_reg_8_/CK (SAEDRVT14_FDP_V2_1)      0.00       0.00 r
+  frontend_reqQ/D_OUT_reg_8_/Q (SAEDRVT14_FDP_V2_1)       0.04       0.04 f
+  frontend_reqQ/D_OUT[8] (SizedFIFO_00000012_00000008_00000003_0)
+                                                          0.00       0.04 f
+  mem_req[8] (out)                                        0.00 *     0.04 f
+  data arrival time                                                  0.04
+
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  output external delay                                  -0.48      -0.48
+  data required time                                                -0.48
+  --------------------------------------------------------------------------
+  data required time                                                -0.48
+  data arrival time                                                 -0.04
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.52
+
+
+  Startpoint: mem_resp_b (input port clocked by CLK)
+  Endpoint: frontend_respBitQ/arr_reg_5__0_
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: i2f
+  Path Type: min
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  input external delay                                    0.48       0.48 f
+  mem_resp_b (in)                                         0.00       0.48 f
+  frontend_respBitQ/D_IN[0] (SizedFIFO_00000001_00000008_00000003_0)
+                                                          0.00       0.48 f
+  frontend_respBitQ/U28/X (SAEDRVT14_MUX2_MM_0P5)         0.01 *     0.49 f
+  frontend_respBitQ/arr_reg_5__0_/D (SAEDRVT14_FDP_V2_0P5)
+                                                          0.00 *     0.49 f
+  data arrival time                                                  0.49
+
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  frontend_respBitQ/arr_reg_5__0_/CK (SAEDRVT14_FDP_V2_0P5)
+                                                          0.00       0.00 r
+  library hold time                                       0.00       0.00
+  data required time                                                 0.00
+  --------------------------------------------------------------------------
+  data required time                                                 0.00
+  data arrival time                                                 -0.49
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.49
+
+
+1

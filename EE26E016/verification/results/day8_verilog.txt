@@ -1,0 +1,7 @@
+checking package dependencies
+compiling ./QRTypes.bsv
+compiling ./QRInternalTypes.bsv
+compiling QRBlocks.bsv
+code generation for mkQRBlocks starts
+Verilog file created: build_v/mkQRBlocks.v
+All packages are up to date.

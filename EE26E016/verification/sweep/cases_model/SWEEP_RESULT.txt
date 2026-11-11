@@ -1,0 +1,6 @@
+cases: 120
+  limit PASS     60
+  none PASS      30
+  over PASS      30
+  (over: hardware reported failed: 30)
+MISMATCHES: 0

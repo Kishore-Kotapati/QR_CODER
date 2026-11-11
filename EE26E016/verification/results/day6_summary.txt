@@ -1,0 +1,11 @@
+Day 6 checks on varaha-eda.cs.iitm.ac.in at Tue Oct 27 22:48:51 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+--------------------------------------------------------------
+RS vectors                     wrote /scratch/CS6230_EE26E016/qr/work/verification/vectors/backend/rs_vectors.hex: 3812 fixable blocks (0..t errors) + 782 blocks with more than t errors, 98 shapes, seed 2027
+TbSyndrome (again)             RESULT: PASS
+TbBM                           RESULT: PASS
+BM: 4594 blocks: 3812 fixable (0..t errors), 782 with more than t errors (BM said fail on 16)
+BM cycles: 119536 in total, at most 31 for one block
+records with a mismatch: 0
+bsc warnings                   0
+Verilog for mkBMUnit           OK (bsv/build_v/mkBMUnit.v)
+--------------------------------------------------------------

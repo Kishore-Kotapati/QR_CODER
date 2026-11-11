@@ -1,0 +1,53 @@
+
+[TEST 1/10] Clean Handout Symbol Baseline (21x21)...
+  -> Test 1 PASSED! Decoded full message in 563 cycles.
+
+[TEST 2/10] Format Bit Error (1 flip in Copy 1, dist=1)...
+  -> Test 2 PASSED! Decoded full message in 572 cycles.
+
+[TEST 3/10] Format Bit Error (2 flips in Copy 1, dist=2)...
+  -> Test 3 PASSED! Decoded full message in 572 cycles.
+
+[TEST 4/10] Format Bit Error (3 flips in Copy 1, dist=3)...
+  -> Test 4 PASSED! Decoded full message in 572 cycles.
+
+[TEST 5/10] Format Tie-Breaker (1 flip in Copy 1, 1 flip in Copy 2)...
+  -> Test 5 PASSED! Decoded full message in 572 cycles.
+
+[TEST 6/10] Uncorrectable Format (>3 flips in both copies: Expect FAILED)...
+  -> Test 6 PASSED! Expected failure correctly asserted for uncorrectable format (57 cycles).
+
+[TEST 7/10] Invalid Grid Dimension (N=22 != 17+4v: Expect FAILED)...
+  -> Test 7 PASSED! Expected failure correctly asserted for invalid dimension N=22 (3 cycles).
+
+[TEST 8/10] Consecutive Start Recovery (Re-start after failed without HW reset)...
+  -> Test 8 PASSED! Decoded full message in 563 cycles.
+
+[TEST 9/10] Consumer Backpressure (Stalling getByte reads)...
+   [Test 9 Backpressure] Read byte 0 ('H') at cycle 550
+   [Test 9 Backpressure] Read byte 1 ('E') at cycle 558
+   [Test 9 Backpressure] Read byte 2 ('L') at cycle 566
+   [Test 9 Backpressure] Read byte 3 ('L') at cycle 574
+   [Test 9 Backpressure] Read byte 4 ('O') at cycle 582
+   [Test 9 Backpressure] Read byte 5 (' ') at cycle 590
+   [Test 9 Backpressure] Read byte 6 ('C') at cycle 598
+   [Test 9 Backpressure] Read byte 7 ('A') at cycle 606
+   [Test 9 Backpressure] Read byte 8 ('D') at cycle 614
+   [Test 9 Backpressure] Read byte 9 (' ') at cycle 622
+   [Test 9 Backpressure] Read byte 10 ('F') at cycle 630
+   [Test 9 Backpressure] Read byte 11 ('O') at cycle 638
+   [Test 9 Backpressure] Read byte 12 ('R') at cycle 646
+   [Test 9 Backpressure] Read byte 13 (' ') at cycle 654
+   [Test 9 Backpressure] Read byte 14 ('V') at cycle 662
+   [Test 9 Backpressure] Read byte 15 ('L') at cycle 670
+   [Test 9 Backpressure] Read byte 16 ('S') at cycle 678
+   [Test 9 Backpressure] Read byte 17 ('I') at cycle 686
+  -> Test 9 PASSED! Decoded full message in 686 cycles.
+
+[TEST 10/10] Reed-Solomon Hardware Correction (2 corrupted data bytes in memory)...
+  -> Test 10 PASSED! Decoded full message in 637 cycles.
+
+==============================================================
+  VERIFICATION COMPLETE: ALL 10 CORNER-CASE TESTS PASSED!
+==============================================================
+

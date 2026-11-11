@@ -1,0 +1,7 @@
+Day 4 checks on varaha-eda.cs.iitm.ac.in at Sun Oct 25 15:24:50 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+--------------------------------------------------------------
+TbGF (QRGF property checks)              QRGF checks: 198215 run, 0 failed RESULT: PASS 
+TbGFVectors (vs Person A model)          WAITING: no /scratch/CS6230_EE26E016/qr/work/verification/vectors/backend/gf_mul.hex yet (Rishi makes it)
+Verilog for mkGFProbe                    OK (bsv/build_v/mkGFProbe.v)
+--------------------------------------------------------------
+Next (in tmux, a few minutes):  bash /scratch/CS6230_EE26E016/qr/work/pd/experiments/B0_gf_probe/run_dc_probe.sh

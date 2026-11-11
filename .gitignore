@@ -1,0 +1,11 @@
+*.zip
+__pycache__/
+*.pyc
+*.ddc
+*.mw
+*.sdb
+*.so
+*.o
+bsim_dir/
+build/
+*.log.gz

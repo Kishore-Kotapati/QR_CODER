@@ -1,0 +1,245 @@
+checking package dependencies
+compiling ./QRBackendStub.bsv
+code generation for mkQRBackendStub starts
+Warning: "QRBackendStub.bsv", line 14, column 8: (G0117)
+  Rule `reset' shadows the effects of `getCorrectedByte' when they execute in
+  the same clock cycle. Affected method calls:
+    readPtr.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRBackendStub.bsv", line 14, column 8: (G0117)
+  Rule `reset' shadows the effects of `putRawByte' when they execute in the
+  same clock cycle. Affected method calls:
+    state.write, rawCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRBackendStub.bsv", line 14, column 8: (G0117)
+  Rule `reset' shadows the effects of `configure' when they execute in the
+  same clock cycle. Affected method calls:
+    state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Verilog file created: build/mkQRBackendStub.v
+compiling QRDecoder.bsv
+code generation for mkQRDecoder starts
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "startPayload" was treated as more urgent than
+  "monitorFailure". Conflicts:
+    "startPayload" cannot fire before "monitorFailure":
+      calls to payload_state.write vs. payload_state.read
+    "monitorFailure" cannot fire before "startPayload":
+      calls to state.write vs. state.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "monitorFailure" was treated as more urgent than
+  "monitorDone". Conflicts:
+    "monitorFailure" cannot fire before "monitorDone":
+      calls to
+	state.write vs. state.read
+	isFailed.write vs. isFailed.read
+    "monitorDone" cannot fire before "monitorFailure":
+      calls to state.write vs. state.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "frontend_streamToBackend" was treated as more urgent than
+  "frontend_traverseReq". Conflicts:
+    "frontend_streamToBackend" cannot fire before "frontend_traverseReq":
+      calls to frontend_rawByteQ.deq vs. frontend_rawByteQ.notFull
+    "frontend_traverseReq" cannot fire before "frontend_streamToBackend":
+      calls to frontend_state.write vs. frontend_state.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "startPayload" was treated as more urgent than
+  "payload_emitFinalByte". Conflicts:
+    "startPayload" cannot fire before "payload_emitFinalByte":
+      calls to
+	payload_charQ.clear vs. payload_charQ.notEmpty
+	payload_pendingChar.write vs. payload_pendingChar.read
+	payload_flushingLast.write vs. payload_flushingLast.read
+	payload_outQ.clear vs. payload_outQ.enq
+    "payload_emitFinalByte" cannot fire before "startPayload":
+      calls to payload_state.write vs. payload_state.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_pullByteFromBackend" was treated as more urgent than
+  "payload_parseMode". Conflicts:
+    "payload_pullByteFromBackend" cannot fire before "payload_parseMode":
+      calls to
+	payload_bytesPulled.write vs. payload_bytesPulled.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+    "payload_parseMode" cannot fire before "payload_pullByteFromBackend":
+      calls to
+	payload_state.write vs. payload_state.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_pullByteFromBackend" was treated as more urgent than
+  "payload_parseCount". Conflicts:
+    "payload_pullByteFromBackend" cannot fire before "payload_parseCount":
+      calls to
+	payload_bytesPulled.write vs. payload_bytesPulled.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+    "payload_parseCount" cannot fire before "payload_pullByteFromBackend":
+      calls to
+	payload_state.write vs. payload_state.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_emitFinalByte" was treated as more urgent than
+  "payload_drainNumericSubDigits". Conflicts:
+    "payload_emitFinalByte" cannot fire before "payload_drainNumericSubDigits":
+      calls to payload_state.write vs. payload_state.read
+    "payload_drainNumericSubDigits" cannot fire before "payload_emitFinalByte":
+      calls to payload_charQ.enq vs. payload_charQ.notEmpty
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_pullByteFromBackend" was treated as more urgent than
+  "payload_parseNumericGroup". Conflicts:
+    "payload_pullByteFromBackend" cannot fire before "payload_parseNumericGroup":
+      calls to
+	payload_bytesPulled.write vs. payload_bytesPulled.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+    "payload_parseNumericGroup" cannot fire before "payload_pullByteFromBackend":
+      calls to
+	payload_state.write vs. payload_state.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_emitFinalByte" was treated as more urgent than
+  "payload_parseNumericGroup". Conflicts:
+    "payload_emitFinalByte" cannot fire before "payload_parseNumericGroup":
+      calls to payload_state.write vs. payload_state.read
+    "payload_parseNumericGroup" cannot fire before "payload_emitFinalByte":
+      calls to payload_charQ.enq vs. payload_charQ.notEmpty
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_emitFinalByte" was treated as more urgent than
+  "payload_drainAlnumSubChar". Conflicts:
+    "payload_emitFinalByte" cannot fire before "payload_drainAlnumSubChar":
+      calls to payload_state.write vs. payload_state.read
+    "payload_drainAlnumSubChar" cannot fire before "payload_emitFinalByte":
+      calls to payload_charQ.enq vs. payload_charQ.notEmpty
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_pullByteFromBackend" was treated as more urgent than
+  "payload_parseAlnumGroup". Conflicts:
+    "payload_pullByteFromBackend" cannot fire before "payload_parseAlnumGroup":
+      calls to
+	payload_bytesPulled.write vs. payload_bytesPulled.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+    "payload_parseAlnumGroup" cannot fire before "payload_pullByteFromBackend":
+      calls to
+	payload_state.write vs. payload_state.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_emitFinalByte" was treated as more urgent than
+  "payload_parseAlnumGroup". Conflicts:
+    "payload_emitFinalByte" cannot fire before "payload_parseAlnumGroup":
+      calls to payload_state.write vs. payload_state.read
+    "payload_parseAlnumGroup" cannot fire before "payload_emitFinalByte":
+      calls to payload_charQ.enq vs. payload_charQ.notEmpty
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_pullByteFromBackend" was treated as more urgent than
+  "payload_parseByteMode". Conflicts:
+    "payload_pullByteFromBackend" cannot fire before "payload_parseByteMode":
+      calls to
+	payload_bytesPulled.write vs. payload_bytesPulled.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+    "payload_parseByteMode" cannot fire before "payload_pullByteFromBackend":
+      calls to
+	payload_state.write vs. payload_state.read
+	payload_bitBuf.write vs. payload_bitBuf.read
+	payload_bitCount.write vs. payload_bitCount.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_emitFinalByte" was treated as more urgent than
+  "payload_parseByteMode". Conflicts:
+    "payload_emitFinalByte" cannot fire before "payload_parseByteMode":
+      calls to payload_state.write vs. payload_state.read
+    "payload_parseByteMode" cannot fire before "payload_emitFinalByte":
+      calls to payload_charQ.enq vs. payload_charQ.notEmpty
+Warning: "QRDecoder.bsv", line 27, column 8: (G0010)
+  Rule "payload_emitFinalByte" was treated as more urgent than
+  "payload_finishMsg". Conflicts:
+    "payload_emitFinalByte" cannot fire before "payload_finishMsg":
+      calls to payload_state.write vs. payload_state.read
+    "payload_finishMsg" cannot fire before "payload_emitFinalByte":
+      calls to payload_flushingLast.write vs. payload_flushingLast.read
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_finishMsg' when they execute in
+  the same clock cycle. Affected method calls:
+    payload_flushingLast.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_pipelineChar' when they execute
+  in the same clock cycle. Affected method calls:
+    payload_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_parseByteMode' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write, payload_bitBuf.write, payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_parseAlnumGroup' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_drainAlnumSubChar' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_parseNumericGroup' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_drainNumericSubDigits' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write, payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_emitFinalByte' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_parseCount' when they execute
+  in the same clock cycle. Affected method calls:
+    payload_state.write, payload_bitBuf.write, payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_parseMode' when they execute in
+  the same clock cycle. Affected method calls:
+    payload_state.write, payload_bitBuf.write, payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `payload_pullByteFromBackend' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_bytesPulled.write, payload_bitBuf.write, payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `start' shadows the effects of `mem_req' when they execute in the same
+  clock cycle. Affected method calls:
+    frontend_respWaiting.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `startPayload' shadows the effects of `payload_pipelineChar' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `payload_emitFinalByte' shadows the effects of `payload_parseCount'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 27, column 8: (G0117)
+  Rule `payload_emitFinalByte' shadows the effects of `payload_parseMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Verilog file created: build/mkQRDecoder.v
+All packages are up to date.

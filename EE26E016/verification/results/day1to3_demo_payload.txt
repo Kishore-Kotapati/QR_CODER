@@ -1,0 +1,2 @@
+data bytes: 20 93 0b 78 d1 71 13 26 d5 77 38 ec 44 fe 00 ec
+ok: True | message: HELLO CAD FOR VLSI | 

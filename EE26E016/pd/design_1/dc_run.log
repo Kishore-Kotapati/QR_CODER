@@ -1,0 +1,1254 @@
+/home/tools/pd_tools/syn/U-2022.12/bin/dc_shell: /home/tools/pd_tools/syn/U-2022.12/bin/snps_platform: /bin/csh: bad interpreter: No such file or directory
+
+                           Design Compiler Graphical 
+                                 DC Ultra (TM)
+                                  DFTMAX (TM)
+                              Power Compiler (TM)
+                                 DesignWare (R)
+                                 DC Expert (TM)
+                               Design Vision (TM)
+                               HDL Compiler (TM)
+                               VHDL Compiler (TM)
+                                  DFT Compiler
+                               Design Compiler(R)
+
+                 Version U-2022.12 for linux64 - Nov 22, 2022 
+
+                    Copyright (c) 1988 - 2022 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+Initializing...
+Initializing gui preferences from file  /home/CS6230_EE26E016/.synopsys_dc_gui/preferences.tcl
+# -------------------------------------------------------
+# Design and Path Variables
+# -------------------------------------------------------
+# Person B copy of Person A's team dc.tcl (A_R1_2026-10-31/syn_scripts/dc.tcl).
+# Only these things differ, all marked "B:":
+#   B: design / file list / period / tag come from the environment
+#   B: optional clock gating (GATE=1) for redesign round R2
+#   B: report_clock_gating added
+set DESIGN $env(DESIGN)
+mkQRDecoder
+set TAG    $env(TAG)
+r0_plain
+set _OUTPUTS_PATH ../outputs_$TAG
+../outputs_r0_plain
+set _REPORTS_PATH ../reports_$TAG
+../reports_r0_plain
+##
+# -------------------------------------------------------
+# Library Setup - SAED14nm EDK 03_2025
+# -------------------------------------------------------
+set PDK_PATH "/home/tools/pdk/SAED14nm_EDK_03_2025"
+/home/tools/pdk/SAED14nm_EDK_03_2025
+set target_library    [list]
+set link_library      "*"
+*
+# Define the root path for Synopsys 2022 installation
+set SYNOPSYS_ROOT "/home/tools/pd_tools/syn/U-2022.12"
+/home/tools/pd_tools/syn/U-2022.12
+set synthetic_library [list \
+  $SYNOPSYS_ROOT/libraries/syn/dw_foundation.sldb \
+  $SYNOPSYS_ROOT/libraries/syn/standard.sldb \
+]
+/home/tools/pd_tools/syn/U-2022.12/libraries/syn/dw_foundation.sldb /home/tools/pd_tools/syn/U-2022.12/libraries/syn/standard.sldb
+# Target library: SAED14 RVT, NLDM, base, SS corner (0.72V, 125C) - worst case for setup
+set target_library [concat $target_library \
+$PDK_PATH/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db \
+]
+/home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db
+# Link library: same RVT base library
+set link_library [concat $link_library \
+$PDK_PATH/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db \
+]
+* /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db
+# Combine all libraries
+set link_library [concat $link_library $target_library $synthetic_library]
+* /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db /home/tools/pd_tools/syn/U-2022.12/libraries/syn/dw_foundation.sldb /home/tools/pd_tools/syn/U-2022.12/libraries/syn/standard.sldb
+##
+# -------------------------------------------------------
+# Output Directory Setup and SVF
+# -------------------------------------------------------
+file mkdir ${_OUTPUTS_PATH}
+file mkdir ${_REPORTS_PATH}
+set_svf ${_OUTPUTS_PATH}/${DESIGN}.svf
+1
+# -------------------------------------------------------
+# RTL Read and Elaboration
+# -------------------------------------------------------
+# B: file list made by run_dc_full.sh (all bsc Verilog + the Bluespec library modules used)
+analyze -format verilog [split [string trim [read [open ../rtl_$TAG/files.txt]]] "\n"]
+Running PRESTO HDLC
+Compiling source file ../rtl_r0_plain/FIFO2.v
+Compiling source file ../rtl_r0_plain/RegFile.v
+Compiling source file ../rtl_r0_plain/mkBMUnit.v
+Compiling source file ../rtl_r0_plain/mkBMUnit2.v
+Compiling source file ../rtl_r0_plain/mkBMUnit3.v
+Compiling source file ../rtl_r0_plain/mkChienForney.v
+Compiling source file ../rtl_r0_plain/mkQRBlocks.v
+Compiling source file ../rtl_r0_plain/mkQRDecoder.v
+Compiling source file ../rtl_r0_plain/mkSyndromeUnit.v
+Presto compilation completed successfully.
+Loading db file '/home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db'
+Loading db file '/home/tools/pd_tools/syn/U-2022.12/libraries/syn/dw_foundation.sldb'
+Loading db file '/home/tools/pd_tools/syn/U-2022.12/libraries/syn/standard.sldb'
+1
+elaborate $DESIGN
+Loading db file '/home/tools/pd_tools/syn/U-2022.12/libraries/syn/gtech.db'
+  Loading link library 'saed14rvt_base_ss0p72v125c'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+
+Statistics for case statements in always block at line 2420 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2422           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 2434 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2444           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 2474 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2476           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 2488 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2497           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 2669 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2674           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2698 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2704           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2728 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2734           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2780 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2785           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2804 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2811           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2829 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2836           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2853 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2857           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2871 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2875           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 2917 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2923           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 2943 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           2958           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 3009 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3011           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 3063 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3067           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 3082 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3096           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 3125 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3139           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 3179 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3189           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 3228 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3231           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 3262 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3268           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 3285 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3290           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 3304 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3319           |     auto/no      |
+===============================================
+
+Statistics for case statements in always block at line 3364 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3366           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 3402 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3412           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 7339 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7341           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7390 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7392           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7516 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7518           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7535 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7539           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7557 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7559           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7608 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7617           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7647 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7651           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7663 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7665           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7671 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7673           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7679 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7681           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7832 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7834           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 7953 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           7955           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 8079 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           8081           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 8216 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           8218           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 8334 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           8336           |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 8627 in file
+	'../rtl_r0_plain/mkQRDecoder.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           8629           |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine mkQRDecoder line 8717 in file
+		'../rtl_r0_plain/mkQRDecoder.v'.
+======================================================================================
+|       Register Name        |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+======================================================================================
+|         state_reg          | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|   payload_totalBytes_reg   | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+| payload_symbolVersion_reg  | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|     payload_state_reg      | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|  payload_pendingChar_reg   | Flip-flop |   9   |  Y  | N  | N  | N  | N  | N  | N  |
+|   payload_numSubIdx_reg    | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|    payload_numSubD3_reg    | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|    payload_numSubD2_reg    | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|  payload_flushingLast_reg  | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    payload_currMode_reg    | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+| payload_currCharCount_reg  | Flip-flop |  16   |  Y  | N  | N  | N  | N  | N  | N  |
+|  payload_bytesPulled_reg   | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|    payload_bitCount_reg    | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|     payload_bitBuf_reg     | Flip-flop |  32   |  Y  | N  | N  | N  | N  | N  | N  |
+|  payload_alnumSubIdx_reg   | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   payload_alnumSubC2_reg   | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|     payloadStarted_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|        isFailed_reg        | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|         isDone_reg         | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    frontend_version_reg    | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|  frontend_symbolSize_reg   | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|     frontend_state_reg     | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+|   frontend_rightCol_reg    | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|  frontend_respWaiting_reg  | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    frontend_respTag_reg    | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|     frontend_respR_reg     | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|     frontend_respC_reg     | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|   frontend_reqValid_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    frontend_reqTag_reg     | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|    frontend_reqRow_reg     | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|    frontend_reqCol_reg     | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|    frontend_goingUp_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   frontend_fmtWord2_reg    | Flip-flop |  15   |  Y  | N  | N  | N  | N  | N  | N  |
+|   frontend_fmtWord1_reg    | Flip-flop |  15   |  Y  | N  | N  | N  | N  | N  | N  |
+|    frontend_fmtIdx_reg     | Flip-flop |   4   |  Y  | N  | N  | N  | N  | N  | N  |
+| frontend_currentConfig_reg | Flip-flop |  33   |  Y  | N  | N  | N  | N  | N  | N  |
+|    frontend_currRow_reg    | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|  frontend_configValid_reg  | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   frontend_colOffset_reg   | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|   frontend_bytesSent_reg   | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|   frontend_byteShift_reg   | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|   frontend_bitCount_reg    | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+======================================================================================
+Presto compilation completed successfully. (mkQRDecoder)
+Elaborated 1 design.
+Current design is now 'mkQRDecoder'.
+Information: Building the design 'mkQRBlocks'. (HDL-193)
+
+Statistics for case statements in always block at line 629 in file
+	'../rtl_r0_plain/mkQRBlocks.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           639            |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 745 in file
+	'../rtl_r0_plain/mkQRBlocks.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           751            |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 791 in file
+	'../rtl_r0_plain/mkQRBlocks.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           797            |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 875 in file
+	'../rtl_r0_plain/mkQRBlocks.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           890            |    auto/auto     |
+===============================================
+
+Statistics for case statements in always block at line 940 in file
+	'../rtl_r0_plain/mkQRBlocks.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           955            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine mkQRBlocks line 1008 in file
+		'../rtl_r0_plain/mkQRBlocks.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    totalData_reg    | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|      total_reg      | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|      state_reg      | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+|       row_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|     rcount_reg      | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|      rbase_reg      | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|       rb_reg        | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|       oi_reg        | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|     ocount_reg      | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|      obase_reg      | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|       ob_reg        | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|       nb_reg        | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|       n1_reg        | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|        k_reg        | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      inEc_reg       | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     hasLong_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|     fixIdx_reg      | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|       ec_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|      dstep_reg      | Flip-flop |   3   |  Y  | N  | N  | N  | N  | N  | N  |
+|       d1_reg        | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|       blk_reg       | Flip-flop |   7   |  Y  | N  | N  | N  | N  | N  | N  |
+|     baseN1_reg      | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+|      base_reg       | Flip-flop |  12   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (mkQRBlocks)
+Information: Building the design 'FIFO2' instantiated from design 'mkQRDecoder' with
+	the parameters "width=32'h00000008,guarded=1'h1". (HDL-193)
+
+Inferred memory devices in process
+	in routine FIFO2_00000008_1 line 81 in file
+		'../rtl_r0_plain/FIFO2.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    full_reg_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    empty_reg_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine FIFO2_00000008_1 line 110 in file
+		'../rtl_r0_plain/FIFO2.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    data1_reg_reg    | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|    data0_reg_reg    | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (FIFO2_00000008_1)
+Information: Building the design 'FIFO2' instantiated from design 'mkQRDecoder' with
+	the parameters "width=32'h00000009,guarded=1'h1". (HDL-193)
+
+Inferred memory devices in process
+	in routine FIFO2_00000009_1 line 81 in file
+		'../rtl_r0_plain/FIFO2.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    full_reg_reg     | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|    empty_reg_reg    | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine FIFO2_00000009_1 line 110 in file
+		'../rtl_r0_plain/FIFO2.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    data1_reg_reg    | Flip-flop |   9   |  Y  | N  | N  | N  | N  | N  | N  |
+|    data0_reg_reg    | Flip-flop |   9   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (FIFO2_00000009_1)
+Information: Building the design 'mkBMUnit'. (HDL-193)
+
+Statistics for case statements in always block at line 3788 in file
+	'../rtl_r0_plain/mkBMUnit.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           3790           |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine mkBMUnit line 4306 in file
+		'../rtl_r0_plain/mkBMUnit.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        w_reg        | Flip-flop |  120  |  Y  | N  | N  | N  | N  | N  | N  |
+|      state_reg      | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|       sq_reg        | Flip-flop |  240  |  Y  | N  | N  | N  | N  | N  | N  |
+|        r_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|        l_reg        | Flip-flop |   6   |  Y  | N  | N  | N  | N  | N  | N  |
+|      failR_reg      | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|       ec_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|        c_reg        | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|       bx_reg        | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|        b_reg        | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (mkBMUnit)
+Information: Building the design 'mkChienForney'. (HDL-193)
+
+Statistics for case statements in always block at line 1372 in file
+	'../rtl_r0_plain/mkChienForney.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           1374           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 1417 in file
+	'../rtl_r0_plain/mkChienForney.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           1420           |    auto/user     |
+===============================================
+
+Statistics for case statements in always block at line 4929 in file
+	'../rtl_r0_plain/mkChienForney.v'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|           4931           |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine mkChienForney line 5449 in file
+		'../rtl_r0_plain/mkChienForney.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|      state_reg      | Flip-flop |   2   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s16_reg       | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|      nLen_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       lsh_reg       | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|       lq_reg        | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|       lam_reg       | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|      lReg_reg       | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|        i_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|        h_reg        | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|        g_reg        | Flip-flop |  128  |  Y  | N  | N  | N  | N  | N  | N  |
+|       fx_reg        | Flip-flop |  240  |  Y  | N  | N  | N  | N  | N  | N  |
+|      failR_reg      | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+|       ec_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+|        d_reg        | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       cnt_reg       | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (mkChienForney)
+Information: Building the design 'RegFile' instantiated from design 'mkQRBlocks' with
+	the parameters "addr_width=32'h0000000c,data_width=32'h00000008,lo=12'h000,hi=12'he79". (HDL-193)
+
+Inferred memory devices in process
+	in routine RegFile_0000000c_00000008_000_e79 line 65 in file
+		'../rtl_r0_plain/RegFile.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|       arr_reg       | Flip-flop | 29648 |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Statistics for MUX_OPs
+==========================================================================
+|           block name/line            | Inputs | Outputs | # sel inputs |
+==========================================================================
+| RegFile_0000000c_00000008_000_e79/71 |  4096  |    8    |      12      |
+| RegFile_0000000c_00000008_000_e79/72 |  4096  |    8    |      12      |
+| RegFile_0000000c_00000008_000_e79/73 |  4096  |    8    |      12      |
+| RegFile_0000000c_00000008_000_e79/74 |  4096  |    8    |      12      |
+| RegFile_0000000c_00000008_000_e79/75 |  4096  |    8    |      12      |
+==========================================================================
+Presto compilation completed successfully. (RegFile_0000000c_00000008_000_e79)
+Information: Building the design 'mkSyndromeUnit'. (HDL-193)
+
+Inferred memory devices in process
+	in routine mkSyndromeUnit line 1814 in file
+		'../rtl_r0_plain/mkSyndromeUnit.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|       s_9_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_8_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_7_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_6_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_5_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_4_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_3_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_29_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_28_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_27_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_26_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_25_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_24_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_23_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_22_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_21_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_20_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_2_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_19_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_18_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_17_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_16_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_15_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_14_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_13_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_12_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_11_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|      s_10_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_1_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       s_0_reg       | Flip-flop |   8   |  Y  | N  | N  | N  | N  | N  | N  |
+|       ec_reg        | Flip-flop |   5   |  Y  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (mkSyndromeUnit)
+1
+current_design $DESIGN
+Current design is 'mkQRDecoder'.
+{mkQRDecoder}
+link
+
+  Linking design 'mkQRDecoder'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (8 designs)               /scratch/CS6230_EE26E016/qr/work/pd/experiments/B2_full/work/mkQRDecoder.db, etc
+  saed14rvt_base_ss0p72v125c (library) /home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db
+  dw_foundation.sldb (library) /home/tools/pd_tools/syn/U-2022.12/libraries/syn/dw_foundation.sldb
+
+1
+# -------------------------------------------------------
+# Apply Timing Constraints (Spec Section 6.2)
+# -------------------------------------------------------
+# B: same SDC as Person A (40 % IO delay), period from PERIOD
+set T $env(PERIOD)
+5.0
+create_clock -name CLK -period $T [get_ports CLK]
+1
+set data_in [remove_from_collection [all_inputs] [get_ports CLK]]
+{RST_N start_size[7] start_size[6] start_size[5] start_size[4] start_size[3] start_size[2] start_size[1] start_size[0] EN_start EN_getByte EN_mem_req mem_resp_b}
+set_input_delay  -clock CLK [expr 0.4*$T] $data_in
+1
+set_output_delay -clock CLK [expr 0.4*$T] [all_outputs]
+1
+# -------------------------------------------------------
+# Optimization Constraints
+# -------------------------------------------------------
+set_max_area 0
+1
+set_dont_retime $DESIGN true
+1
+##
+# -------------------------------------------------------
+# Path Group Setup (matching noc_d1)
+# -------------------------------------------------------
+set unq_input_list [all_inputs]
+{CLK RST_N start_size[7] start_size[6] start_size[5] start_size[4] start_size[3] start_size[2] start_size[1] start_size[0] EN_start EN_getByte EN_mem_req mem_resp_b}
+foreach_in_collection unq_clock_element [all_clocks] {
+  set unq_clock_name [get_port $unq_clock_element]
+  set unq_input_list [remove_from_collection $unq_input_list $unq_clock_name]
+}
+# Critical range scaled down for 14nm (0.15 ns)
+group_path -name f2f -from [all_registers]  -to [all_registers] -critical_range 0.15
+1
+group_path -name i2f -from $unq_input_list  -to [all_registers] -critical_range 0.15
+1
+group_path -name f2o -from [all_registers]  -to [all_outputs]   -critical_range 0.15
+1
+group_path -name i2o -from $unq_input_list  -to [all_outputs]   -critical_range 0.15
+1
+##
+# -------------------------------------------------------
+# Pre-Compile Design Check
+# -------------------------------------------------------
+check_design > ${_REPORTS_PATH}/check_design.pre_compile.rpt
+# -------------------------------------------------------
+# Synthesis: compile_ultra
+# -------------------------------------------------------
+# B: R2 = clock gating.  DC replaces "flop + enable mux" by one clock gate
+# per group of flops that share an enable (each 8-bit store byte = 1 group).
+if {$env(GATE) == 1} {
+  # integrated clock-gating cell if the library has one, else latch + AND
+  set nicg 0
+  catch {set nicg [sizeof_collection [get_lib_cells -quiet */* -filter "clock_gating_integrated_cell =~ latch_posedge*"]]}
+  if {$nicg > 0} {
+    puts "B: $nicg integrated clock-gating cells in the library -> using them"
+    set_clock_gating_style -sequential_cell latch -positive_edge_logic {integrated} -minimum_bitwidth 3
+  } else {
+    puts "B: no integrated clock-gating cell found, using latch + AND"
+    set_clock_gating_style -sequential_cell latch -positive_edge_logic {and} -minimum_bitwidth 3
+  }
+  compile_ultra -no_autoungroup -no_seq_output_inversion -timing_high_effort_script -gate_clock
+} else {
+  compile_ultra -no_autoungroup -no_seq_output_inversion -timing_high_effort_script
+}
+Warning: The -timing_high_effort_script option is ignored.  (OPT-1342)
+Information: Performing power optimization. (PWR-850)
+Alib files are up-to-date.
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library  |         Version         | Available |
+============================================================================
+| Basic DW Building Blocks           | U-2022.12-DWBB_202212.0 |     *     |
+| Licensed DW Building Blocks        | U-2022.12-DWBB_202212.0 |     *     |
+============================================================================
+
+====================================================================================================
+| Flow Information                                                                                 |
+----------------------------------------------------------------------------------------------------
+| Flow         | Design Compiler WLM                                                               |
+| Comand Line  | compile_ultra -no_seq_output_inversion -no_autoungroup                            |
+|              | -timing_high_effort_script                                                        |
+====================================================================================================
+| Design Information                                      | Value                                  |
+====================================================================================================
+| Number of Scenarios                                     | 0                                      |
+| Leaf Cell Count                                         | 84039                                  |
+| Number of User Hierarchies                              | 8                                      |
+| Sequential Cell Count                                   | 32117                                  |
+| Macro Count                                             | 0                                      |
+| Number of Power Domains                                 | 0                                      |
+| Number of Path Groups                                   | 6                                      |
+| Number of VT Class                                      | 1                                      |
+| Number of Clocks                                        | 1                                      |
+| Number of Dont Touch Cells                              | 5766                                   |
+| Number of Dont Touch Nets                               | 0                                      |
+| Number of Size Only Cells                               | 0                                      |
+| Design with UPF Data                                    | false                                  |
+====================================================================================================
+
+Information: There are 281 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+Information: Uniquified 2 instances of design 'FIFO2_00000008_1'. (OPT-1056)
+  Simplifying Design 'mkQRDecoder'
+
+Warning: Library cell 'SAEDRVT14_FSDP_V2LP_1' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDP_V2_2' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDP_V2_0P5' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_4' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_2' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_1' could not be modeled for sequential mapping. (OPT-1201)
+Loaded alib file './alib-52/saed14rvt_base_ss0p72v125c.db.alib'
+Information: State dependent leakage is now switched from on to off.
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'RegFile_0000000c_00000008_000_e79'
+  Processing 'mkQRDecoder'
+Information: Added key list 'DesignWare' to design 'mkQRDecoder'. (DDB-72)
+Information: The register 'payload_alnumSubC2_reg[7]' is a constant and will be removed. (OPT-1206)
+Information: The register 'payload_numSubD2_reg[7]' is a constant and will be removed. (OPT-1206)
+Information: The register 'payload_numSubD2_reg[6]' is a constant and will be removed. (OPT-1206)
+Information: The register 'payload_numSubD3_reg[7]' is a constant and will be removed. (OPT-1206)
+Information: The register 'payload_numSubD3_reg[6]' is a constant and will be removed. (OPT-1206)
+ Implement Synthetic for 'mkQRDecoder'.
+  Processing 'mkQRDecoder_DW_div_uns_J2_0'
+  Processing 'mkQRDecoder_DW_div_uns_J2_1'
+  Processing 'mkQRDecoder_DW_div_uns_J2_2'
+  Processing 'mkQRDecoder_DW_div_uns_J2_3'
+  Processing 'mkQRDecoder_DW_div_uns_J2_4'
+  Processing 'mkQRDecoder_DW_div_uns_J2_5'
+  Processing 'mkQRDecoder_DW_div_uns_J2_6'
+  Processing 'mkQRDecoder_DW_div_uns_J2_7'
+  Processing 'mkQRDecoder_DW_div_uns_J2_8'
+  Processing 'mkQRDecoder_DW_div_uns_J2_9'
+  Processing 'mkQRDecoder_DW_div_uns_J2_10'
+  Processing 'mkQRDecoder_DW_div_uns_J2_11'
+  Processing 'mkChienForney'
+Information: The register 'lq_reg[126]' is a constant and will be removed. (OPT-1206)
+Information: The register 'lq_reg[124]' is a constant and will be removed. (OPT-1206)
+Information: The register 'lq_reg[122]' is a constant and will be removed. (OPT-1206)
+Information: The register 'lq_reg[120]' is a constant and will be removed. (OPT-1206)
+ Implement Synthetic for 'mkChienForney'.
+Information: Added key list 'DesignWare' to design 'mkChienForney'. (DDB-72)
+  Processing 'mkBMUnit'
+Information: The register 'bx_reg[6]' is a constant and will be removed. (OPT-1206)
+Information: The register 'bx_reg[4]' is a constant and will be removed. (OPT-1206)
+Information: The register 'bx_reg[2]' is a constant and will be removed. (OPT-1206)
+Information: The register 'bx_reg[0]' is a constant and will be removed. (OPT-1206)
+ Implement Synthetic for 'mkBMUnit'.
+Information: Added key list 'DesignWare' to design 'mkBMUnit'. (DDB-72)
+  Processing 'mkSyndromeUnit'
+Information: Added key list 'DesignWare' to design 'mkSyndromeUnit'. (DDB-72)
+  Processing 'mkQRBlocks'
+Information: The register 'n1_reg[6]' is a constant and will be removed. (OPT-1206)
+ Implement Synthetic for 'mkQRBlocks'.
+Information: Added key list 'DesignWare' to design 'mkQRBlocks'. (DDB-72)
+  Processing 'FIFO2_00000009_1'
+  Processing 'FIFO2_00000008_1_0'
+  Processing 'FIFO2_00000008_1_1'
+Warning: 'group_path' constraint made a reference 'from payload_alnumSubC2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD2_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD3_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD3_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/n1_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[120]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[122]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[124]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[126]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[0]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[2]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[4]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_alnumSubC2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD2_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD3_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD3_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/n1_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[120]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[122]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[124]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[126]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[0]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[2]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[4]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_alnumSubC2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD2_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD3_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from payload_numSubD3_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/n1_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[120]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[122]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[124]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/cf/lq_reg[126]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[0]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[2]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[4]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'from backend/bm_m/bx_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_alnumSubC2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD2_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD2_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD3_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to payload_numSubD3_reg[7]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/n1_reg[6]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[120]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[122]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[124]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/cf/lq_reg[126]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[0]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[2]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[4]' which no longer exists.  (TIM-179)
+Warning: 'group_path' constraint made a reference 'to backend/bm_m/bx_reg[6]' which no longer exists.  (TIM-179)
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+Information: The library cell 'SAEDRVT14_TIE1_V1ECO_1' in the library 'saed14rvt_base_ss0p72v125c' is not characterized for internal power. (PWR-536)
+Information: The library cell 'SAEDRVT14_TIE1_V1_2' in the library 'saed14rvt_base_ss0p72v125c' is not characterized for internal power. (PWR-536)
+Information: The library cell 'SAEDRVT14_TIE1_4' in the library 'saed14rvt_base_ss0p72v125c' is not characterized for internal power. (PWR-536)
+Information: The library cell 'SAEDRVT14_TIE0_V1_2' in the library 'saed14rvt_base_ss0p72v125c' is not characterized for internal power. (PWR-536)
+Information: The library cell 'SAEDRVT14_TIE0_4' in the library 'saed14rvt_base_ss0p72v125c' is not characterized for internal power. (PWR-536)
+Information: The target library(s) contains cell(s), other than black boxes, that are not characterized for internal power. (PWR-24)
+Information: Complementing port 'FULL_N' in design 'FIFO2_00000008_1_1'.
+	 The new name of the port is 'FULL_N_BAR'. (OPT-319)
+Information: Complementing port 'CLR' in design 'FIFO2_00000008_1_0'.
+	 The new name of the port is 'CLR_BAR'. (OPT-319)
+Information: Complementing port 'CLR' in design 'FIFO2_00000009_1'.
+	 The new name of the port is 'CLR_BAR'. (OPT-319)
+Information: Complementing port 'RDY_start' in design 'mkBMUnit'.
+	 The new name of the port is 'RDY_start_BAR'. (OPT-319)
+Information: The register 'payload_currMode_reg[3]' is a constant and will be removed. (OPT-1206)
+
+Threshold voltage group cell usage:
+>> RVT 100.00%
+
+  Beginning Mapping Optimizations  (Ultra High effort)
+  -------------------------------
+Information: Updating design information... (UID-85)
+  Mapping Optimization (Phase 1)
+  Mapping Optimization (Phase 2)
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    1:00:08   96244.7      0.00      -0.0       0.0                           379451424.0000
+    1:00:52   96234.7      0.03       0.1       0.0                           379403904.0000
+
+Threshold voltage group cell usage:
+>> RVT 100.00%
+
+  Beginning Constant Register Removal
+  -----------------------------------
+
+Threshold voltage group cell usage:
+>> RVT 100.00%
+
+  Beginning Global Optimizations
+  ------------------------------
+  Numerical Synthesis (Phase 1)
+  Numerical Synthesis (Phase 2)
+  Global Optimization (Phase 1)
+  Global Optimization (Phase 2)
+  Global Optimization (Phase 3)
+  Global Optimization (Phase 4)
+  Global Optimization (Phase 5)
+  Global Optimization (Phase 6)
+  Global Optimization (Phase 7)
+  Global Optimization (Phase 8)
+  Global Optimization (Phase 9)
+  Global Optimization (Phase 10)
+  Global Optimization (Phase 11)
+  Global Optimization (Phase 12)
+  Global Optimization (Phase 13)
+  Global Optimization (Phase 14)
+  Global Optimization (Phase 15)
+  Global Optimization (Phase 16)
+  Global Optimization (Phase 17)
+  Global Optimization (Phase 18)
+  Global Optimization (Phase 19)
+  Global Optimization (Phase 20)
+  Global Optimization (Phase 21)
+  Global Optimization (Phase 22)
+  Global Optimization (Phase 23)
+  Global Optimization (Phase 24)
+  Global Optimization (Phase 25)
+  Global Optimization (Phase 26)
+  Global Optimization (Phase 27)
+  Global Optimization (Phase 28)
+  Global Optimization (Phase 29)
+  Global Optimization (Phase 30)
+  Global Optimization (Phase 31)
+  Global Optimization (Phase 32)
+  Global Optimization (Phase 33)
+  Mapping 'mkQRBlocks_DP_OP_176J6_129_9454_2'
+
+Threshold voltage group cell usage:
+>> RVT 0.00%
+
+  Beginning Isolate Ports
+  -----------------------
+
+Threshold voltage group cell usage:
+>> RVT 0.00%
+
+  Beginning Delay Optimization
+  ----------------------------
+    1:13:51   75017.2      2.20   13114.3      16.6                           181274720.0000
+    1:15:00   75210.2      0.00       0.0      16.6                           182282928.0000
+    1:15:00   75210.2      0.00       0.0      16.6                           182282928.0000
+    1:15:06   75210.2      0.00       0.0      16.6                           182282928.0000
+
+Threshold voltage group cell usage:
+>> RVT 0.00%
+    1:17:25   75183.8      0.20       1.5      16.6                           182184272.0000
+    1:18:32   75183.2      0.22       1.7      16.6                           182182144.0000
+
+  Beginning WLM Backend Optimization
+  --------------------------------------
+    1:21:05   75186.5      0.22       1.7      16.6                           182202000.0000
+    1:21:16   74755.9      0.22       1.7      16.6                           181537456.0000
+    1:22:03   74443.2      0.22       1.7      16.6                           180150784.0000
+    1:24:04   74244.0      0.22       1.7      16.5                           179190016.0000
+    1:25:21   74030.8      0.22       1.7      16.5                           178000160.0000
+    1:27:11   73765.6      0.22       1.7      16.5                           176406400.0000
+    1:29:04   73509.6      0.22       1.7      16.5                           174879056.0000
+    1:30:03   73396.3      0.22       1.7      16.5                           174147296.0000
+    1:30:56   73257.8      0.22       1.7      16.5                           173129552.0000
+    1:31:58   73102.5      0.22       1.7      16.5                           172220816.0000
+    1:32:59   73063.8      0.17       1.5      16.5                           171984208.0000
+    1:33:18   73064.0      0.00       0.0      16.5                           171995776.0000
+    1:33:19   73064.0      0.00       0.0      16.5                           171995776.0000
+    1:36:43   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:45   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:46   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:46   63076.1      0.00       0.0       0.0                           151346416.0000
+
+Threshold voltage group cell usage:
+>> RVT 100.00%
+
+
+  Beginning Leakage Power Optimization  (max_leakage_power 0)
+  ------------------------------------
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    1:36:46   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:47   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:47   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:36:48   63076.1      0.00       0.0       0.0                           151346416.0000
+    1:39:24   63045.9      0.01       0.0       0.0                           139179936.0000
+    1:39:25   63045.9      0.01       0.0       0.0                           139179936.0000
+    1:39:32   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:32   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:32   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:32   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:32   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:32   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:32   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+    1:39:33   63090.1      0.00       0.0       0.0                           139445584.0000
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    1:41:01   63090.1      0.00       0.0       0.0                           139442384.0000
+    1:46:28   60938.9      0.00       0.0       0.0                           123508496.0000
+    1:46:35   60938.9      0.00       0.0       0.0                           123508496.0000
+    1:46:36   60938.9      0.00       0.0       0.0                           123508496.0000
+    1:48:07   60877.6      0.00       0.0       0.0                           121944968.0000
+    1:56:39   60833.1      0.00       0.0       0.0                           121535192.0000
+    1:59:42   60816.1      0.00       0.0       0.0                           121389504.0000
+    2:00:41   60800.1      0.00       0.0       0.0                           121278072.0000
+    2:01:23   60762.4      0.00       0.0       0.0                           120891032.0000
+    2:04:45   60688.7      0.00       0.0       0.0                           120347720.0000
+    2:04:45   60688.7      0.00       0.0       0.0                           120347720.0000
+    2:04:45   60688.7      0.00       0.0       0.0                           120347720.0000
+    2:04:46   60688.7      0.00       0.0       0.0                           120347720.0000
+    2:04:48   60688.9      0.00       0.0       0.0                           120348808.0000
+    2:04:48   60688.9      0.00       0.0       0.0                           120348808.0000
+    2:17:10   60138.2      0.00       0.0       0.0                           115632496.0000
+Loading db file '/home/tools/pdk/SAED14nm_EDK_03_2025/SAED14nm_EDK_STD_RVT/liberty/nldm/base/saed14rvt_base_ss0p72v125c.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Warning: Design 'mkQRDecoder' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'backend/syn/CLK': 32102 load(s), 1 driver(s)
+Warning: Library cell 'SAEDRVT14_FSDP_V2LP_1' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDP_V2_2' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDP_V2_0P5' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_4' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_2' could not be modeled for sequential mapping. (OPT-1201)
+Warning: Library cell 'SAEDRVT14_FSDN_V2_1' could not be modeled for sequential mapping. (OPT-1201)
+Information: State dependent leakage is now switched from off to on.
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+1
+# -------------------------------------------------------
+# Naming Convention Enforcement
+# -------------------------------------------------------
+define_name_rules verilog -allowed "a-z A-Z 0-9 _ /"
+1
+change_names -hier -rules verilog
+Warning: In the design mkQRDecoder, net '*Logic1*' is connecting multiple ports. (UCN-1)
+Warning: The specified replacement character (_) is conflicting with the specified allowed or restricted character.   (UCN-4)
+1
+# -------------------------------------------------------
+# Write Post-Synthesis Outputs
+# -------------------------------------------------------
+write -format verilog -hierarchy -output ${_OUTPUTS_PATH}/$DESIGN.verilog.v
+Writing verilog file '/scratch/CS6230_EE26E016/qr/work/pd/experiments/B2_full/outputs_r0_plain/mkQRDecoder.verilog.v'.
+Warning: Verilog 'assign' or 'tran' statements are written out. (VO-4)
+1
+write -format ddc     -hierarchy -output ${_OUTPUTS_PATH}/$DESIGN.compile.ddc
+Writing ddc file '../outputs_r0_plain/mkQRDecoder.compile.ddc'.
+1
+# -------------------------------------------------------
+# Timing, Area, Power and QoR Reports
+# -------------------------------------------------------
+report_qor > ${_REPORTS_PATH}/dc_compile_ultra_1.qor
+report_timing -nosplit -max_paths 20 -input -nets -cap -tran -nosplit -sig 2 -group f2f > ${_REPORTS_PATH}/setup.f2f.tim.rpt
+report_timing -nosplit -max_paths 20 -input -nets -cap -tran -nosplit -sig 2 -group i2f > ${_REPORTS_PATH}/setup.i2f.tim.rpt
+report_timing -nosplit -max_paths 20 -input -nets -cap -tran -nosplit -sig 2 -group f2o > ${_REPORTS_PATH}/setup.f2o.tim.rpt
+report_timing -nosplit -max_paths 20 -input -nets -cap -tran -nosplit -sig 3 -group i2o > ${_REPORTS_PATH}/setup.i2o.tim.rpt
+report_area -hierarchy > ${_REPORTS_PATH}/area_hierarchy.rpt
+report_power -analysis_effort medium > ${_REPORTS_PATH}/power.rpt
+report_clock_gating -nosplit > ${_REPORTS_PATH}/clock_gating.rpt
+report_constraint -all_violators > ${_REPORTS_PATH}/constraints.rpt
+check_design > ${_REPORTS_PATH}/check_design.dc_compile_1.rpt
+# -------------------------------------------------------
+# Multi-Port Net Fix
+# -------------------------------------------------------
+set verilogout_no_tri  "true"
+true
+set_app_var compile_advanced_fix_multiple_port_nets "true"
+true
+set_fix_multiple_port_nets -all -buffer_constants
+1
+change_names -hier -rules verilog
+Warning: In the design mkQRDecoder, net 'RDY_failed' is connecting multiple ports. (UCN-1)
+1
+write -format verilog -hierarchy -output ${_OUTPUTS_PATH}/$DESIGN.verilog_noassign.v
+Writing verilog file '/scratch/CS6230_EE26E016/qr/work/pd/experiments/B2_full/outputs_r0_plain/mkQRDecoder.verilog_noassign.v'.
+Warning: Verilog 'assign' or 'tran' statements are written out. (VO-4)
+1
+exit
+
+Memory usage for this session 1646 Mbytes.
+Memory usage for this session including child processes 1646 Mbytes.
+CPU usage for this session 3886 seconds ( 1.08 hours ).
+Elapsed time for this session 8724 seconds ( 2.42 hours ).
+
+Thank you...

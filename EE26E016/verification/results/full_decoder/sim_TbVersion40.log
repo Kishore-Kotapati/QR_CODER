@@ -1,0 +1,20 @@
+start: 177x177 symbol (Version 40)
+byte: 48  'H'
+byte: 45  'E'
+byte: 4c  'L'
+byte: 4c  'L'
+byte: 4f  'O'
+byte: 20  ' '
+byte: 43  'C'
+byte: 41  'A'
+byte: 44  'D'
+byte: 20  ' '
+byte: 46  'F'
+byte: 4f  'O'
+byte: 52  'R'
+byte: 20  ' '
+byte: 56  'V'
+byte: 4c  'L'
+byte: 53  'S'
+byte: 49  'I'   <- last
+SUCCESS: Version 40 decoded in 35761 cycles

@@ -1,0 +1,18 @@
+R2 regression on varaha-eda.cs.iitm.ac.in at Fri Oct 30 21:30:56 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+--------------------------------------------------------------
+R0  TbBM      RESULT: PASS    warnings 0   at most 31 for one block
+R0  TbRS      RESULT: PASS    warnings 0   at most 201 for one block
+R0  TbBlocks  RESULT: PASS    warnings 0   at most 11292 cycles 
+R2  TbBM      RESULT: PASS    warnings 0   at most 61 for one block
+R2  TbRS      RESULT: PASS    warnings 0   at most 231 for one block
+R2  TbBlocks  RESULT: PASS    warnings 0   at most 13722 cycles 
+--------------------------------------------------------------
+Full decoder (A's top + B's mkQRBlocks) [bsc -D QR_R2_BM] on varaha-eda.cs.iitm.ac.in at Fri Oct 30 21:31:50 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+backend line in the temp QRDecoder.bsv: 33:   QRBackend backend <- mkQRBlocks;
+--------------------------------------------------------------
+TbLogged    want ok   -> output 'HELLO CAD FOR VLSI'  protocol OK  decode @0: latency 1020 cycles (start to last byte taken), 238 memory reads
+TbDamaged3  want ok   -> output 'HELLO CAD FOR VLSI'  protocol OK  decode @0: latency 1065 cycles (start to last byte taken), 238 memory reads
+TbDamaged6  want fail -> output ''  protocol OK  
+Verilog mkQRDecoder (with QRBlocks): made, C5 ports OK
+--------------------------------------------------------------
+Logs in /scratch/CS6230_EE26E016/qr/work/verification/results/full_decoder_r2

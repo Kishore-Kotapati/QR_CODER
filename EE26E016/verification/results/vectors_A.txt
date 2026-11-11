@@ -1,0 +1,5 @@
+Backend tests on Person A's vectors on varaha-eda.cs.iitm.ac.in at Sun Nov  1 21:26:57 IST 2026
+TbSyndrome  RESULT: PASS    syndrome unit: 3825 blocks (791 clean, 3034 with errors), 285925 bytes, 95835 syndromes compared, 389411 cycles 
+TbBM        RESULT: PASS    BM: 4594 blocks: 3812 fixable (0..t errors), 782 with more than t errors (BM said fail on 16) 
+TbRS        RESULT: PASS    RS: 4594 blocks: 3812 fixable -> 3812 fixed exactly (22246 bytes corrected) RS: 0 blocks with more than t errors -> 0 failed, 0 decoded to another valid codeword (allowed) 
+TbBlocks    RESULT: PASS    QRBlocks: 727 symbols: 491 must decode -> 491 decoded exactly; 236 with a block beyond t -> 236 gave isError 

@@ -1,0 +1,9 @@
+Bluesim object reused: build/mkQRDecoder.{h,o}
+Bluesim object reused: build/mkQRBlocks.{h,o}
+Bluesim object reused: build/mkSyndromeUnit.{h,o}
+Bluesim object reused: build/mkBMUnit3.{h,o}
+Bluesim object reused: build/mkChienForney.{h,o}
+Bluesim object created: build/mkTbVersion40.{h,o}
+Bluesim object created: build/model_mkTbVersion40.{h,o}
+Simulation shared library created: build/TbVersion40.so
+Simulation executable created: build/TbVersion40

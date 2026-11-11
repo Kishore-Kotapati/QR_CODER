@@ -1,0 +1,16 @@
+Day 1-3 checks on varaha-eda.cs.iitm.ac.in at Sun Oct 25 15:07:18 IST 2026
+python: Python 3.6.8   bsc: /scratch/niyas/bsc/inst/bin/bsc
+--------------------------------------------------------------
+test_front_ref.py                              16/16 checks passed
+test_payload_ref.py                            17/17 checks passed
+test_against_segno.py                          SKIP: segno not installed (pip install --user segno)
+test_protocol_spec.py                          19/19 checks passed
+front_ref demo (sample)                        decision: level M, mask 2
+payload_ref demo (sample)                      ok: True | message: HELLO CAD FOR VLSI | 
+TbSample (starter decoder)                     OK: fails at once, as expected
+TbLogged log -> protocol checker               OK
+interface test (QRBackend stub)                RESULT: PASS
+C5 port check on mkQRDecoder.v                 OK
+--------------------------------------------------------------
+All outputs: /scratch/CS6230_EE26E016/qr/work/verification/results
+Send Claude the contents of: /scratch/CS6230_EE26E016/qr/work/verification/results/day1to3_summary.txt

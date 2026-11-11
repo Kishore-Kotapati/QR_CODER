@@ -1,0 +1,14 @@
+Day 7 checks on varaha-eda.cs.iitm.ac.in at Tue Oct 27 22:59:51 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+--------------------------------------------------------------
+TbSyndrome.bsv                 RESULT: PASS
+TbBM.bsv                       RESULT: PASS
+TbRS.bsv                       RESULT: PASS
+RS: 4594 blocks: 3812 fixable -> 3812 fixed exactly (22246 bytes corrected)
+RS: 782 blocks with more than t errors -> 782 failed, 0 decoded to another valid codeword (allowed)
+decode cycles (BM + Chien/Forney): 449915 in total, at most 201 for one block
+records with a mismatch: 0
+bsc warnings (TbRS)            0
+Verilog mkSyndromeUnit         OK
+Verilog mkBMUnit               OK
+Verilog mkChienForney          OK
+--------------------------------------------------------------

@@ -1,0 +1,19 @@
+checking package dependencies
+compiling TbDamaged6.bsv
+code generation for mkTbDamaged6 starts
+Warning: "TbDamaged6.bsv", line 27, column 8: (G0010)
+  Rule "fail" was treated as more urgent than "empty". Conflicts:
+    "fail" cannot fire before "empty": calls to stopAt.write vs. stopAt.read
+    "empty" cannot fire before "fail": calls to stopAt.write vs. stopAt.read
+Warning: "TbDamaged6.bsv", line 27, column 8: (G0117)
+  Rule `get' shadows the effects of `empty' when they execute in the same
+  clock cycle. Affected method calls:
+    stopAt.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "TbDamaged6.bsv", line 27, column 8: (G0117)
+  Rule `get' shadows the effects of `fail' when they execute in the same clock
+  cycle. Affected method calls:
+    stopAt.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Elaborated module file created: build/mkTbDamaged6.ba
+All packages are up to date.

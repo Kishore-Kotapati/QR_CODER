@@ -1,0 +1,30 @@
+[TEST 1/5] Empty Message Decode: PASSED! (done asserted with 0 bytes)
+  [Byte Mode] received: 'T' (0x54) last=0
+  [Byte Mode] received: 'e' (0x65) last=0
+  [Byte Mode] received: 's' (0x73) last=0
+  [Byte Mode] received: 't' (0x74) last=1
+[TEST 2/5] 8-Bit Byte Mode ('Test'): PASSED!
+
+  [Numeric 3-digit + 1-digit] received: '8' (0x38) last=0
+  [Numeric 3-digit + 1-digit] received: '6' (0x36) last=0
+  [Numeric 3-digit + 1-digit] received: '7' (0x37) last=0
+  [Numeric 3-digit + 1-digit] received: '5' (0x35) last=0
+  [Numeric 3-digit + 1-digit] received: '3' (0x33) last=0
+  [Numeric 3-digit + 1-digit] received: '0' (0x30) last=0
+  [Numeric 3-digit + 1-digit] received: '9' (0x39) last=1
+[TEST 3/5] Numeric Mode ('8675309' 3+3+1 digits): PASSED!
+
+  [Numeric 2-digit group] received: '1' (0x31) last=0
+  [Numeric 2-digit group] received: '2' (0x32) last=1
+[TEST 4/5] Numeric Mode ('12' 2 digits): PASSED!
+
+  [Multi-Segment Alnum+Numeric] received: 'A' (0x41) last=0
+  [Multi-Segment Alnum+Numeric] received: 'B' (0x42) last=0
+  [Multi-Segment Alnum+Numeric] received: '1' (0x31) last=0
+  [Multi-Segment Alnum+Numeric] received: '2' (0x32) last=1
+[TEST 5/5] Multi-Segment ('AB' + '12'): PASSED!
+
+==============================================================
+  ALL PAYLOAD MODES VERIFIED AND PASSED IN BSV RTL!
+==============================================================
+

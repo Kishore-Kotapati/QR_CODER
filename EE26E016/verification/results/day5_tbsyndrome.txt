@@ -1,0 +1,16 @@
+checking package dependencies
+compiling ./QRRS.bsv
+code generation for mkSyndromeUnit starts
+Elaborated module file created: build/mkSyndromeUnit.ba
+compiling ../verification/tb/TbSyndrome.bsv
+code generation for mkTbSyndrome starts
+Elaborated module file created: build/mkTbSyndrome.ba
+All packages are up to date.
+Bluesim object created: build/mkTbSyndrome.{h,o}
+Bluesim object created: build/mkSyndromeUnit.{h,o}
+Bluesim object created: build/model_mkTbSyndrome.{h,o}
+Simulation shared library created: build/tbSyn.so
+Simulation executable created: build/tbSyn
+syndrome unit: 3825 blocks (791 clean, 3034 with errors), 285925 bytes, 95835 syndromes compared, 389411 cycles
+blocks with a mismatch: 0
+RESULT: PASS

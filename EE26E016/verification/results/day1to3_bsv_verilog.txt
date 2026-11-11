@@ -1,0 +1,9 @@
+checking package dependencies
+compiling QRDecoder.bsv
+code generation for mkQRDecoder starts
+Warning: "QRDecoder.bsv", line 7, column 8: (G0022)
+  According to the generated schedule, method `getByte' is never ready.
+Warning: "QRDecoder.bsv", line 7, column 8: (G0022)
+  According to the generated schedule, method `mem_req' is never ready.
+Verilog file created: build/mkQRDecoder.v
+All packages are up to date.

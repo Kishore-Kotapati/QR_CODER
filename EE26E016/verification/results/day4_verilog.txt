@@ -1,0 +1,6 @@
+checking package dependencies
+compiling ./QRGF.bsv
+compiling GFProbe.bsv
+code generation for mkGFProbe starts
+Verilog file created: build_v/mkGFProbe.v
+All packages are up to date.

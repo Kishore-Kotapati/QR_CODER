@@ -1,0 +1,4 @@
+size N = 21  ->  version 1
+copy 1: f14..f0 = 101111001111100  nearest distance 0  -> level M (00), mask 2
+copy 2: f14..f0 = 101111001111100  nearest distance 0  -> level M (00), mask 2
+decision: level M, mask 2

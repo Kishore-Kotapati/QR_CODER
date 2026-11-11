@@ -1,0 +1,8 @@
+PASS test_decode_frontend_bad_format
+PASS test_decode_frontend_bad_size
+PASS test_decode_frontend_on_sample
+PASS test_payload_names_on_failure
+PASS test_payload_names_on_success
+PASS test_total_from_geometry_matches_course_table
+
+6/6 checks passed

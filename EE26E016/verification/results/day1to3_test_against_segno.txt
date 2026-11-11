@@ -1,0 +1,7 @@
+PASS test_every_mask_on_small_and_large_versions
+      480 single-block symbols decoded to the right message
+PASS test_full_message_on_single_block_symbols
+      160 symbols: version/level/mask all correct
+PASS test_settings_every_version_and_level
+
+3/3 checks passed  (segno 1.6.6)

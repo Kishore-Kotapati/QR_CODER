@@ -1,0 +1,4 @@
+checking package dependencies
+Error: "./QRFrontEnd.bsv", line 108, column 16: (P0005)
+  Unexpected SV 3.1 keyword `dist'; expected `{' or identifier starting with
+  lowercase

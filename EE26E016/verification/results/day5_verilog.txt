@@ -1,0 +1,5 @@
+checking package dependencies
+compiling QRRS.bsv
+code generation for mkSyndromeUnit starts
+Verilog file created: build_v/mkSyndromeUnit.v
+All packages are up to date.

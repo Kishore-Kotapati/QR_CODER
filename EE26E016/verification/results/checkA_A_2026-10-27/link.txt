@@ -1,0 +1,6 @@
+Bluesim object created: build/mkTbLogged.{h,o}
+Bluesim object created: build/mkQRDecoder.{h,o}
+Bluesim object created: build/mkQRBackendStub.{h,o}
+Bluesim object created: build/model_mkTbLogged.{h,o}
+Simulation shared library created: build/tb.so
+Simulation executable created: build/tb

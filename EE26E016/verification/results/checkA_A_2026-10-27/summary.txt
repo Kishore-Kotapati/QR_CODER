@@ -1,0 +1,16 @@
+Check of Person A RTL 'A_2026-10-27' on varaha-eda.cs.iitm.ac.in at Tue Oct 27 22:02:21 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+files: QRBackendStub.bsv QRDecoder.bsv QRFrontEnd.bsv QRInternalTypes.bsv QRPayload.bsv 
+md5:
+b95b6fbfd7e2627e43e3bf8bed021fd8  QRBackendStub.bsv
+94d77d57aee1d08232b97ba9deb8df31  QRDecoder.bsv
+9848d1d57b78883bbf89ecde03d86eab  QRFrontEnd.bsv
+536269ce29da7c002447b091d44ae797  QRInternalTypes.bsv
+9878219d475a4c5c169787ee7f943cf5  QRPayload.bsv
+--------------------------------------------------------------
+1. COMPILE: OK  (16 urgency warnings G0010 -- see compile.txt)
+2. SAMPLE OUTPUT: HELLO CAD FOR VLSI   (want: HELLO CAD FOR VLSI)
+3. PROTOCOL C1-C5: OK
+     note: decode @0: latency 970 cycles (start to last byte taken), 238 memory reads
+4. C5 PORTS: OK
+--------------------------------------------------------------
+Logs in /scratch/CS6230_EE26E016/qr/work/verification/results/checkA_A_2026-10-27

@@ -1,0 +1,195 @@
+checking package dependencies
+compiling ./QRRS.bsv
+code generation for mkBMUnit4 starts
+Verilog file created: build/mkBMUnit4.v
+code generation for mkSyndromeUnit starts
+Verilog file created: build/mkSyndromeUnit.v
+code generation for mkChienForney starts
+Verilog file created: build/mkChienForney.v
+code generation for mkBMUnit starts
+Verilog file created: build/mkBMUnit.v
+code generation for mkBMUnit2 starts
+Verilog file created: build/mkBMUnit2.v
+code generation for mkBMUnit3 starts
+Verilog file created: build/mkBMUnit3.v
+compiling ./QRBlocks.bsv
+code generation for mkQRBlocks starts
+Verilog file created: build/mkQRBlocks.v
+compiling QRDecoder.bsv
+code generation for mkQRDecoder starts
+Warning: "QRDecoder.bsv", line 23, column 8: (G0036)
+  Rule "payload_doReset" will appear to fire before "payload_doStart" when
+  both fire in the same clock cycle, affecting:
+    calls to
+      payload_state.write vs. payload_state.write
+      payload_bytesPulled.write vs. payload_bytesPulled.write
+      payload_totalBitsLeft.write vs. payload_totalBitsLeft.write
+      payload_allBytesPulled.write vs. payload_allBytesPulled.write
+      payload_bitBuf.write vs. payload_bitBuf.write
+      payload_bitCount.write vs. payload_bitCount.write
+      payload_numSubIdx.write vs. payload_numSubIdx.write
+      payload_alnumSubIdx.write vs. payload_alnumSubIdx.write
+      payload_charQ.clear vs. payload_charQ.clear
+      payload_pendingChar.write vs. payload_pendingChar.write
+      payload_outQ.clear vs. payload_outQ.clear
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_doReset' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_allBytesPulled.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseAlnumGroup' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write,
+    payload_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write,
+    payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of
+  `payload_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseCount' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currCharCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_parseMode' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_currMode.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doStart' shadows the effects of `payload_pullByteFromBackend'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_bytesPulled.write,
+    payload_allBytesPulled.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_pipelineChar' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_pendingChar.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseByteMode' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseAlnumGroup' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_alnumSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_drainAlnumSubChar'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseNumericGroup'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write,
+    payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of
+  `payload_drainNumericSubDigits' when they execute in the same clock cycle.
+  Affected method calls:
+    payload_state.write, payload_numSubIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseCount' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_parseMode' when they
+  execute in the same clock cycle. Affected method calls:
+    payload_state.write,
+    payload_totalBitsLeft.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_emitFinalByte' when
+  they execute in the same clock cycle. Affected method calls:
+    payload_state.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `payload_doReset' shadows the effects of `payload_pullByteFromBackend'
+  when they execute in the same clock cycle. Affected method calls:
+    payload_bytesPulled.write,
+    payload_allBytesPulled.write,
+    payload_bitBuf.write,
+    payload_bitCount.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `frontend_processFmt1Resp' shadows the effects of `frontend_genFmt1'
+  when they execute in the same clock cycle. Affected method calls:
+    frontend_fmtGenIdx.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Warning: "QRDecoder.bsv", line 23, column 8: (G0117)
+  Rule `start' shadows the effects of `frontend_updateReqSent' when they
+  execute in the same clock cycle. Affected method calls:
+    frontend_reqSentLastCycle.write
+  To silence this warning, use the `-no-warn-action-shadowing' flag.
+Verilog file created: build/mkQRDecoder.v
+All packages are up to date.

@@ -1,0 +1,1 @@
+wrote /scratch/CS6230_EE26E016/qr/work/verification/vectors/backend/blocks_vectors.hex: 320 symbols that must decode (25626 damaged bytes) + 160 with a block beyond t, all 160 layouts, seed 2028

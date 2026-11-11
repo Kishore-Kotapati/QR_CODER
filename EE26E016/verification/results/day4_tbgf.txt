@@ -1,0 +1,12 @@
+checking package dependencies
+compiling ./QRGF.bsv
+compiling ../verification/tb/TbGF.bsv
+code generation for mkTbGF starts
+Elaborated module file created: build/mkTbGF.ba
+All packages are up to date.
+Bluesim object created: build/mkTbGF.{h,o}
+Bluesim object created: build/model_mkTbGF.{h,o}
+Simulation shared library created: build/tbGF.so
+Simulation executable created: build/tbGF
+QRGF checks: 198215 run, 0 failed
+RESULT: PASS

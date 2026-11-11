@@ -1,0 +1,12 @@
+checking package dependencies
+All packages are up to date.
+Bluesim object reused: build_vecA/mkTbBM.{h,o}
+Bluesim object reused: build_vecA/mkSyndromeUnit.{h,o}
+Bluesim object reused: build_vecA/mkBMUnit.{h,o}
+Bluesim object created: build_vecA/model_mkTbBM.{h,o}
+Simulation shared library created: build_vecA/TbBM.so
+Simulation executable created: build_vecA/TbBM
+BM: 4594 blocks: 3812 fixable (0..t errors), 782 with more than t errors (BM said fail on 16)
+BM cycles: 119536 in total, at most 31 for one block
+records with a mismatch: 0
+RESULT: PASS

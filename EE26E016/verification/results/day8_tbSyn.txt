@@ -1,0 +1,10 @@
+checking package dependencies
+All packages are up to date.
+Bluesim object reused: build/mkTbSyndrome.{h,o}
+Bluesim object reused: build/mkSyndromeUnit.{h,o}
+Bluesim object created: build/model_mkTbSyndrome.{h,o}
+Simulation shared library created: build/tbSyn.so
+Simulation executable created: build/tbSyn
+syndrome unit: 3825 blocks (791 clean, 3034 with errors), 285925 bytes, 95835 syndromes compared, 389411 cycles
+blocks with a mismatch: 0
+RESULT: PASS

@@ -1,0 +1,24 @@
+Day 8 checks on varaha-eda.cs.iitm.ac.in at Tue Oct 27 23:20:41 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+--------------------------------------------------------------
+Symbol vectors               wrote /scratch/CS6230_EE26E016/qr/work/verification/vectors/backend/blocks_vectors.hex: 320 symbols that must decode (25626 damaged bytes) + 160 with a block beyond t, all 160 layouts, seed 2028
+TbSyndrome.bsv               RESULT: PASS
+TbBM.bsv                     RESULT: PASS
+TbRS.bsv                     RESULT: PASS
+TbBlocks.bsv                 RESULT: PASS
+QRBlocks: 480 symbols: 320 must decode -> 320 decoded exactly; 160 with a block beyond t -> 160 gave isError
+abuse: 69 resets in the middle of the input, 64 resets after half the output; 219835 data bytes read
+decode time (last raw byte -> ready/error): at most 11292 cycles (version 40)
+symbols with a mismatch: 0
+bsc warnings (TbBlocks)      0
+Verilog mkQRBlocks           OK (bsv/build_v/mkQRBlocks.v)
+--------------------------------------------------------------
+Full decoder (Rishi's top + your backend):
+Full decoder (A's top + B's mkQRBlocks) on varaha-eda.cs.iitm.ac.in at Tue Oct 27 23:22:31 IST 2026   bsc: Bluespec Compiler, version 2021.12.1 (build fd501401)
+backend line in the temp QRDecoder.bsv: 33:   QRBackend backend <- mkQRBlocks;
+--------------------------------------------------------------
+TbLogged    want ok   -> output 'HELLO CAD FOR VLSI'  protocol OK  decode @0: latency 1010 cycles (start to last byte taken), 238 memory reads
+TbDamaged3  want ok   -> output 'HELLO CAD FOR VLSI'  protocol OK  decode @0: latency 1055 cycles (start to last byte taken), 238 memory reads
+TbDamaged6  want fail -> output ''  protocol OK  
+Verilog mkQRDecoder (with QRBlocks): made, C5 ports OK
+--------------------------------------------------------------
+Logs in /scratch/CS6230_EE26E016/qr/work/verification/results/full_decoder

@@ -1,0 +1,1 @@
+wrote /scratch/CS6230_EE26E016/qr/work/verification/vectors/backend/rs_vectors.hex: 3812 fixable blocks (0..t errors) + 782 blocks with more than t errors, 98 shapes, seed 2027

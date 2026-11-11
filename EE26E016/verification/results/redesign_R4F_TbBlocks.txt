@@ -1,0 +1,21 @@
+checking package dependencies
+compiling ./QRBlocks.bsv
+code generation for mkQRBlocks starts
+Elaborated module file created: build_r4F/mkQRBlocks.ba
+compiling ../verification/tb/TbBlocks.bsv
+code generation for mkTbBlocks starts
+Elaborated module file created: build_r4F/mkTbBlocks.ba
+All packages are up to date.
+Bluesim object reused: build_r4F/mkSyndromeUnit.{h,o}
+Bluesim object reused: build_r4F/mkBMUnit4.{h,o}
+Bluesim object reused: build_r4F/mkChienForney.{h,o}
+Bluesim object created: build_r4F/mkTbBlocks.{h,o}
+Bluesim object created: build_r4F/mkQRBlocks.{h,o}
+Bluesim object created: build_r4F/model_mkTbBlocks.{h,o}
+Simulation shared library created: build_r4F/TbBlocks.so
+Simulation executable created: build_r4F/TbBlocks
+QRBlocks: 480 symbols: 320 must decode -> 320 decoded exactly; 160 with a block beyond t -> 160 gave isError
+abuse: 69 resets in the middle of the input, 64 resets after half the output; 219835 data bytes read
+decode time (last raw byte -> ready/error): at most 23403 cycles (version 40)
+symbols with a mismatch: 0
+RESULT: PASS

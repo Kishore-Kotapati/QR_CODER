@@ -1,0 +1,19 @@
+PASS test_alnum_odd_and_even_lengths_all_chars
+PASS test_byte_mode_keeps_every_value
+PASS test_count_field_cut_off_fails
+PASS test_count_width_bands
+PASS test_empty_message
+PASS test_ends_when_fewer_than_4_bits_left
+PASS test_largest_valid_values_pass
+PASS test_numeric_short_groups_and_leading_zeros
+PASS test_out_of_range_alnum_fails
+PASS test_out_of_range_numeric_fails
+PASS test_padding_after_terminator_is_ignored
+PASS test_segment_running_past_end_fails
+PASS test_several_segments_in_order
+PASS test_standard_alnum_example
+PASS test_standard_numeric_example
+PASS test_unknown_modes_fail
+PASS test_zero_length_segment_is_fine
+
+17/17 checks passed

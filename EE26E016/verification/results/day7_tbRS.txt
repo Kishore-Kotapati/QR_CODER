@@ -1,0 +1,17 @@
+checking package dependencies
+compiling ../verification/tb/TbRS.bsv
+code generation for mkTbRS starts
+Elaborated module file created: build/mkTbRS.ba
+All packages are up to date.
+Bluesim object reused: build/mkSyndromeUnit.{h,o}
+Bluesim object reused: build/mkBMUnit.{h,o}
+Bluesim object created: build/mkTbRS.{h,o}
+Bluesim object created: build/mkChienForney.{h,o}
+Bluesim object created: build/model_mkTbRS.{h,o}
+Simulation shared library created: build/tbRS.so
+Simulation executable created: build/tbRS
+RS: 4594 blocks: 3812 fixable -> 3812 fixed exactly (22246 bytes corrected)
+RS: 782 blocks with more than t errors -> 782 failed, 0 decoded to another valid codeword (allowed)
+decode cycles (BM + Chien/Forney): 449915 in total, at most 201 for one block
+records with a mismatch: 0
+RESULT: PASS
